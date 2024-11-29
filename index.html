@@ -5,15 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Open YouTube Video in 10 Tabs</title>
 </head>
-<body style="text-align: center; margin-top: 50px;">
+<body>
   <h1>Open YouTube Video in 10 Tabs</h1>
   <p>Enter a YouTube video link below:</p>
-  <input type="text" id="youtubeLink" placeholder="https://youtu.be/vLDjyuS" style="width: 300px; padding: 10px;">
-  <br><br>
-  <button id="openButton" style="padding: 10px 20px; font-size: 16px;">Open in 10 Tabs</button>
+  <input type="text" id="youtubeLink" placeholder="https://youtu.be/example">
+  <button id="openButton">Open in 10 Tabs</button>
 
+  <!-- Add your updated JavaScript code here -->
   <script>
-    // Paste the updated JavaScript code here
+    document.getElementById("openButton").addEventListener("click", function () {
+      const url = document.getElementById("youtubeLink").value.trim();
+
+      // Regular Expression to validate YouTube URLs (with or without query parameters)
+      const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]+(\?.*)?$/;
+
+      if (!youtubeRegex.test(url)) {
+        alert("Please enter a valid YouTube video link.");
+        return;
+      }
+
+      // Open video in 10 tabs
+      for (let i = 0; i < 10; i++) {
+        window.open(url, "_blank");
+      }
+    });
   </script>
 </body>
 </html>
