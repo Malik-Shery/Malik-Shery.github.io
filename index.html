@@ -3,54 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multi-Tab YouTube Opener</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 50px;
-    }
-    input {
-      width: 60%;
-      padding: 10px;
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  <title>Open YouTube Video in 10 Tabs</title>
 </head>
-<body>
+<body style="text-align: center; margin-top: 50px;">
   <h1>Open YouTube Video in 10 Tabs</h1>
   <p>Enter a YouTube video link below:</p>
-  <input type="text" id="videoLink" placeholder="Enter YouTube link here" />
-  <br>
-  <button onclick="openMultipleTabs()">Open in 10 Tabs</button>
+  <input type="text" id="youtubeLink" placeholder="https://youtu.be/vLDjyuS" style="width: 300px; padding: 10px;">
+  <br><br>
+  <button id="openButton" style="padding: 10px 20px; font-size: 16px;">Open in 10 Tabs</button>
 
   <script>
-    function openMultipleTabs() {
-      const videoLink = document.getElementById('videoLink').value;
-
-      // Validate input
-      if (!videoLink || !videoLink.includes("youtube.com/watch")) {
-        alert("Please enter a valid YouTube video link.");
-        return;
-      }
-
-      // Open the video in 10 tabs
-      for (let i = 0; i < 10; i++) {
-        window.open(videoLink, '_blank');
-      }
-    }
+    // Paste the updated JavaScript code here
   </script>
 </body>
 </html>
