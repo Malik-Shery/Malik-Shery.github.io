@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Subway Surfers Game</title>
+    <title>3D Running Man Game</title>
     <style>
         body {
             margin: 0;
@@ -13,122 +13,139 @@
         canvas {
             display: block;
         }
+        #startButton {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        #startButton:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
+
+<!-- Start Button -->
+<button id="startButton">Start Game</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
     let scene, camera, renderer;
     let player, playerSpeed = 0.1;
-    let obstacles = [];
-    let score = 0;
+    let ground;
     let gameOver = false;
+    let gameStarted = false;
 
-    // Initialize the scene
+    // Initialize the scene (only creates the scene and player, does not start the game)
     function init() {
+        // Create scene, camera, and renderer
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Player (Crocodile or Character)
+        // Add a ground
+        const groundGeometry = new THREE.PlaneGeometry(200, 200);
+        const groundMaterial = new THREE.MeshBasicMaterial({ color: 0x228B22, side: THREE.DoubleSide });
+        ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2; // Rotate to lay flat
+        scene.add(ground);
+
+        // Create the "man" (represented by a simple box)
         const playerGeometry = new THREE.BoxGeometry(1, 2, 1);
-        const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x0000FF });
         player = new THREE.Mesh(playerGeometry, playerMaterial);
         player.position.set(0, 1, 0);
         scene.add(player);
 
-        // Add obstacles
+        // Add obstacles to avoid
         createObstacle();
 
-        // Set camera position
-        camera.position.z = 5;
+        // Set the camera position to follow the player
+        camera.position.set(0, 2, 5);
+        camera.lookAt(player.position);
 
-        // Start game loop
-        animate();
+        // Hide the game initially until the start button is clicked
+        renderer.domElement.style.display = "none";
     }
 
     // Create obstacles
     function createObstacle() {
-        const obstacleGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const obstacleGeometry = new THREE.BoxGeometry(3, 1, 1);
         const obstacleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
         const obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
-        // Randomly place obstacles
-        obstacle.position.set(Math.random() * 5 - 2.5, 1, -10); // Avoid obstacles near the player
-        obstacles.push(obstacle);
+        obstacle.position.set(Math.random() * 10 - 5, 0.5, -10); // Position obstacles randomly
         scene.add(obstacle);
     }
 
-    // Handle player movement (left-right and jump)
-    let moveLeft = false;
-    let moveRight = false;
+    // Start the game
+    function startGame() {
+        document.getElementById("startButton").style.display = "none"; // Hide start button
+        renderer.domElement.style.display = "block"; // Show the 3D canvas
 
-    window.addEventListener("keydown", function (event) {
-        if (event.key === "ArrowLeft") {
-            moveLeft = true;
-        }
-        if (event.key === "ArrowRight") {
-            moveRight = true;
-        }
-    });
+        gameStarted = true;
+        animate();
+    }
 
-    window.addEventListener("keyup", function (event) {
-        if (event.key === "ArrowLeft") {
-            moveLeft = false;
-        }
-        if (event.key === "ArrowRight") {
-            moveRight = false;
-        }
-    });
-
-    // Update player position and obstacles
+    // Update function to handle movement and animation
     function update() {
         if (gameOver) return;
 
-        // Move the player left and right
-        if (moveLeft && player.position.x > -2) {
-            player.position.x -= playerSpeed;
-        }
-        if (moveRight && player.position.x < 2) {
-            player.position.x += playerSpeed;
-        }
+        // Move the player forward (simulate running)
+        player.position.z -= playerSpeed;
 
-        // Move obstacles
-        for (let i = 0; i < obstacles.length; i++) {
-            obstacles[i].position.z += playerSpeed * 5;  // Move obstacle towards the player
-            if (obstacles[i].position.z > 5) {
-                obstacles[i].position.z = -10;  // Reset obstacle to the starting position
-                obstacles[i].position.x = Math.random() * 5 - 2.5;  // Random horizontal position
-                score++;
+        // Move obstacles toward the player
+        scene.children.forEach(child => {
+            if (child.position.z > player.position.z + 20 && child !== player && child !== ground) {
+                child.position.z = -10;  // Reset obstacle position behind the player
+                child.position.x = Math.random() * 10 - 5; // Random horizontal position
+            } else if (child !== player && child !== ground) {
+                child.position.z += playerSpeed;  // Move obstacle forward
             }
-            // Check for collision
-            if (Math.abs(player.position.x - obstacles[i].position.x) < 1 &&
-                Math.abs(player.position.z - obstacles[i].position.z) < 1) {
-                gameOver = true;
-                alert("Game Over! Your Score: " + score);
-                resetGame();
+        });
+
+        // Collision detection (simple)
+        scene.children.forEach(child => {
+            if (child !== player && child !== ground) {
+                const dist = player.position.distanceTo(child.position);
+                if (dist < 2) {
+                    gameOver = true;
+                    alert("Game Over! You hit an obstacle!");
+                    resetGame();
+                }
             }
-        }
+        });
     }
 
-    // Reset the game
+    // Reset game
     function resetGame() {
         gameOver = false;
         player.position.set(0, 1, 0);
         score = 0;
-        obstacles = [];
-        for (let i = 0; i < 5; i++) {
-            createObstacle();
-        }
+        scene.children.forEach(child => {
+            if (child !== ground && child !== player) {
+                scene.remove(child); // Remove obstacles
+            }
+        });
+        createObstacle(); // Add a new obstacle
     }
 
-    // Render the scene
+    // Animate the scene
     function animate() {
+        if (!gameStarted) return; // Wait for the game to start
+
         requestAnimationFrame(animate);
 
-        // Update the game logic
+        // Update game logic
         update();
 
         // Render the scene
@@ -137,6 +154,10 @@
 
     // Initialize the game
     init();
+
+    // Listen for the start button click
+    document.getElementById("startButton").addEventListener("click", startGame);
+
 </script>
 
 </body>
