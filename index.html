@@ -3,189 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crocodile Jump Game</title>
+    <title>Subway Surfers Game</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             overflow: hidden;
+            background-color: #f0f0f0;
         }
-        #gameCanvas {
-            background-color: #87CEEB;
-            border: 2px solid #000;
-        }
-        #startButton {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 15px 30px;
-            font-size: 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        #startButton:hover {
-            background-color: #218838;
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: #87CEEB; /* Sky blue background */
         }
     </style>
 </head>
 <body>
 
-<button id="startButton">Start Game</button>
-
-<canvas id="gameCanvas" width="600" height="300"></canvas>
+<canvas id="gameCanvas" width="800" height="400"></canvas>
 
 <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
-    const startButton = document.getElementById("startButton");
 
-    let isGameRunning = false;
-    let crocX = 50, crocY = canvas.height - 80, crocWidth = 50, crocHeight = 50;
-    let crocSpeed = 2;
-    let isJumping = false, jumpHeight = 0;
-    let obstacles = [];
-    let obstacleSpeed = 2;
+    let isGameRunning = true;
+    let characterY = canvas.height - 100;
+    let characterX = 100;
+    let characterWidth = 50;
+    let characterHeight = 50;
+    let gravity = 1;
+    let jumpStrength = 20;
+    let isJumping = false;
+    let jumpSpeed = 0;
     let score = 0;
 
-    // Game state
-    const gravity = 1;
-    const jumpPower = 15;
-
-    // Start the game
-    startButton.addEventListener("click", startGame);
-
-    // Main game loop
+    // Obstacles
+    let obstacles = [];
+    let obstacleSpeed = 3;
+    let obstacleWidth = 50;
+    let obstacleHeight = 50;
+    
+    // Game loop
     function gameLoop() {
         if (!isGameRunning) return;
 
-        clearCanvas();
-        updateCrocodile();
-        updateObstacles();
-        checkCollisions();
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Update the character
+        updateCharacter();
+        
+        // Create and move obstacles
+        createObstacles();
+        moveObstacles();
+
+        // Draw score
         drawScore();
 
+        // Check for collisions
+        checkCollisions();
+
+        // Repeat the game loop
         requestAnimationFrame(gameLoop);
     }
 
-    // Clear the canvas
-    function clearCanvas() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    // Start the game
-    function startGame() {
-        isGameRunning = true;
-        score = 0;
-        crocY = canvas.height - 80;
-        crocSpeed = 2;
-        obstacles = [];
-        obstacleSpeed = 2;
-
-        // Hide the start button
-        startButton.style.display = "none";
-        gameLoop();
-    }
-
-    // Crocodile jump function
-    function jump() {
-        if (!isJumping) {
-            isJumping = true;
-            jumpHeight = jumpPower;
-        }
-    }
-
-    // Update the crocodile's position and state
-    function updateCrocodile() {
+    // Update the character's position (jumping)
+    function updateCharacter() {
         if (isJumping) {
-            crocY -= jumpHeight;
-            jumpHeight -= gravity;
-            if (crocY >= canvas.height - 80) {
-                crocY = canvas.height - 80;
+            characterY -= jumpSpeed;
+            jumpSpeed -= gravity; // Gravity pulls the character down
+            if (characterY >= canvas.height - 100) {
+                characterY = canvas.height - 100;
                 isJumping = false;
+                jumpSpeed = 0;
             }
         }
-
-        // Draw the crocodile (here we'll use a simple green rectangle)
-        ctx.fillStyle = "#006400"; // Crocodile color (green)
-        ctx.fillRect(crocX, crocY, crocWidth, crocHeight);
+        
+        // Draw the character (a simple square for now)
+        ctx.fillStyle = "#FFD700"; // Gold color for the character
+        ctx.fillRect(characterX, characterY, characterWidth, characterHeight);
     }
 
-    // Handle obstacles
-    function updateObstacles() {
-        // Add new obstacles at intervals
-        if (Math.random() < 0.02) {
-            const obstacleHeight = Math.random() * 40 + 20; // Random obstacle height
-            const obstacleX = canvas.width; // Position at the right side
-            const gap = Math.random() * 100 + 50; // Random gap between obstacles
-
-            // Make sure that obstacles are placed with a gap
-            obstacles.push({
-                x: obstacleX,
-                y: canvas.height - obstacleHeight,
-                width: 30,
-                height: obstacleHeight,
-                gap: gap
-            });
+    // Handle obstacle creation and movement
+    function createObstacles() {
+        if (Math.random() < 0.02) { // Randomly generate obstacles
+            const obstacleX = canvas.width;
+            const obstacleY = canvas.height - obstacleHeight;
+            obstacles.push({x: obstacleX, y: obstacleY});
         }
+    }
 
-        // Move and draw obstacles
+    function moveObstacles() {
         for (let i = 0; i < obstacles.length; i++) {
-            const obstacle = obstacles[i];
-            obstacle.x -= obstacleSpeed;
+            obstacles[i].x -= obstacleSpeed;
 
-            // Draw the obstacle
-            ctx.fillStyle = "#8B4513"; // Obstacle color (brown)
-            ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            // Draw the obstacles
+            ctx.fillStyle = "#8B4513"; // Brown color for obstacles
+            ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacleWidth, obstacleHeight);
 
-            // Draw the gap (the area where the crocodile can jump)
-            ctx.fillStyle = "#87CEEB"; // Gap color (sky blue)
-            ctx.fillRect(obstacle.x, canvas.height - obstacle.gap - 50, obstacle.width, 50); // Create the gap between obstacles
-
-            // Remove obstacles that move off the screen
-            if (obstacle.x + obstacle.width < 0) {
+            // Remove obstacles off the screen
+            if (obstacles[i].x + obstacleWidth < 0) {
                 obstacles.splice(i, 1);
-                score++;
+                score++; // Increase score when obstacle is passed
                 i--;
             }
         }
     }
 
+    // Draw the score
+    function drawScore() {
+        ctx.font = "20px Arial";
+        ctx.fillStyle = "#000";
+        ctx.fillText("Score: " + score, 20, 30);
+    }
+
     // Check for collisions with obstacles
     function checkCollisions() {
-        for (const obstacle of obstacles) {
-            // Check if the crocodile is within the obstacle's area, and it's not in the jump gap
-            if (crocX + crocWidth > obstacle.x && crocX < obstacle.x + obstacle.width &&
-                (crocY + crocHeight > obstacle.y || crocY + crocHeight > canvas.height - obstacle.gap - 50)) {
+        for (let i = 0; i < obstacles.length; i++) {
+            if (characterX + characterWidth > obstacles[i].x && characterX < obstacles[i].x + obstacleWidth &&
+                characterY + characterHeight > obstacles[i].y) {
+                // Collision detected
                 gameOver();
             }
         }
     }
 
-    // Display the score
-    function drawScore() {
-        ctx.font = "20px Arial";
-        ctx.fillStyle = "#000";
-        ctx.fillText("Score: " + score, 10, 30);
-    }
-
-    // End the game
+    // Game over function
     function gameOver() {
         isGameRunning = false;
-        alert("Game Over! Your Score: " + score);
-        startButton.style.display = "block"; // Show start button again
+        alert("Game Over! Your score: " + score);
+        resetGame();
     }
 
-    // Event listener for jump
-    canvas.addEventListener("click", jump);
+    // Reset the game
+    function resetGame() {
+        score = 0;
+        characterY = canvas.height - 100;
+        obstacles = [];
+        isGameRunning = true;
+        gameLoop();
+    }
+
+    // Listen for the jump event (click to jump)
+    canvas.addEventListener("click", function() {
+        if (!isJumping) {
+            isJumping = true;
+            jumpSpeed = jumpStrength;
+        }
+    });
+
+    // Start the game loop
+    gameLoop();
 </script>
 
 </body>
