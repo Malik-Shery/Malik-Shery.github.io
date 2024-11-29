@@ -1,75 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Embed YouTube Video Multiple Times</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 20px;
-    }
-    input, button {
-      padding: 10px;
-      margin: 10px;
-      font-size: 16px;
-    }
-    button {
-      cursor: pointer;
-    }
-    .video-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      margin-top: 20px;
-    }
-    iframe {
-      width: 100%;
-      height: 300px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embed YouTube Video in 500 Tabs</title>
 </head>
 <body>
-  <h1>Embed YouTube Video Multiple Times</h1>
-  <p>Enter a YouTube video link below:</p>
-  <input type="text" id="youtubeLink" placeholder="https://youtu.be/your-video-link" size="40">
-  <button id="playButton">Play in 10 Frames</button>
+    <h1>Embed YouTube Video in 500 Tabs</h1>
+    <p>Enter a YouTube video link below:</p>
+    <input type="text" id="videoUrl" placeholder="Enter YouTube link here" style="width: 50%;">
+    <button onclick="embedVideos()">Play in Batches</button>
+    <div id="videoFrames" style="margin-top: 20px;"></div>
+    <div id="batchControls" style="margin-top: 20px;"></div>
 
-  <div class="video-container" id="videoContainer"></div>
+    <script>
+        const BATCH_SIZE = 50; // Number of frames per batch
+        const TOTAL_FRAMES = 500; // Total number of frames
+        let currentBatch = 0;
 
-  <script>
-    document.getElementById("playButton").addEventListener("click", function () {
-      const url = document.getElementById("youtubeLink").value.trim();
+        function embedVideos() {
+            const urlInput = document.getElementById("videoUrl").value.trim();
+            const videoFramesDiv = document.getElementById("videoFrames");
+            const batchControlsDiv = document.getElementById("batchControls");
+            videoFramesDiv.innerHTML = ""; // Clear existing frames
+            batchControlsDiv.innerHTML = ""; // Clear existing controls
 
-      // Regular Expression to validate and extract YouTube Video ID
-      const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            // Extract YouTube video ID from URL
+            const match = urlInput.match(/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+            if (!match || match.length < 2) {
+                alert("Please enter a valid YouTube video link.");
+                return;
+            }
 
-      const match = url.match(youtubeRegex);
+            const videoId = match[1];
+            currentBatch = 0; // Reset to the first batch
 
-      if (!match) {
-        alert("Please enter a valid YouTube video link.");
-        return;
-      }
+            // Load the first batch and set up controls
+            loadBatch(videoId);
+            const nextButton = document.createElement("button");
+            nextButton.innerText = "Next Batch";
+            nextButton.onclick = () => loadBatch(videoId);
+            batchControlsDiv.appendChild(nextButton);
+        }
 
-      // Extract Video ID
-      const videoId = match[1];
+        function loadBatch(videoId) {
+            const videoFramesDiv = document.getElementById("videoFrames");
+            if (currentBatch * BATCH_SIZE >= TOTAL_FRAMES) {
+                alert("All batches have been loaded.");
+                return;
+            }
 
-      // Embed URL format for YouTube
-      const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+            // Clear existing frames
+            videoFramesDiv.innerHTML = "";
 
-      // Get the container and clear it
-      const container = document.getElementById("videoContainer");
-      container.innerHTML = "";
+            // Embed the current batch
+            for (let i = 0; i < BATCH_SIZE; i++) {
+                const frameIndex = currentBatch * BATCH_SIZE + i;
+                if (frameIndex >= TOTAL_FRAMES) break;
 
-      // Create 10 iframes
-      for (let i = 0; i < 10; i++) {
-        const iframe = document.createElement("iframe");
-        iframe.src = embedUrl;
-        iframe.allow = "autoplay";
-        container.appendChild(iframe);
-      }
-    });
-  </script>
+                const iframe = document.createElement("iframe");
+                iframe.width = "300";
+                iframe.height = "170";
+                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                iframe.frameBorder = "0";
+                iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+                iframe.allowFullscreen = true;
+                videoFramesDiv.appendChild(iframe);
+            }
+
+            currentBatch++;
+        }
+    </script>
 </body>
 </html>
