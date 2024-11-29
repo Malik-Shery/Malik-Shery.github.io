@@ -3,19 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time Chat</title>
+    <title>Store Billbook</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div id="chat-container">
-        <h2>Chat Room</h2>
-        <div id="messages"></div>
-        <input type="text" id="message-input" placeholder="Type your message" />
-        <button id="send-button">Send</button>
+    <div class="container">
+        <h1>Store Billbook</h1>
+        <table id="billTable">
+            <thead>
+                <tr>
+                    <th>Quantity</th>
+                    <th>Object Name</th>
+                    <th>Rate</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows for input -->
+                <tr>
+                    <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
+                    <td><input type="text" class="name" onchange="updateTotal()" /></td>
+                    <td><input type="number" class="rate" onchange="updateTotal()" /></td>
+                    <td><span class="value">0</span></td>
+                </tr>
+                <!-- Repeat above row for 9 more times -->
+                <tr>
+                    <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
+                    <td><input type="text" class="name" onchange="updateTotal()" /></td>
+                    <td><input type="number" class="rate" onchange="updateTotal()" /></td>
+                    <td><span class="value">0</span></td>
+                </tr>
+                <tr>
+                    <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
+                    <td><input type="text" class="name" onchange="updateTotal()" /></td>
+                    <td><input type="number" class="rate" onchange="updateTotal()" /></td>
+                    <td><span class="value">0</span></td>
+                </tr>
+                <!-- (Continue for 7 more rows) -->
+                <!-- Total Row -->
+                <tr>
+                    <td colspan="3"><strong>Total</strong></td>
+                    <td><span id="totalValue">0</span></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-
     <script src="script.js"></script>
-
 </body>
 </html>
