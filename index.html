@@ -3,84 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store Billbook</title>
+    <title>Store Billbook & Calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Store Billbook</h1>
-        <table id="billTable">
-            <thead>
-                <tr>
-                    <th>Quantity</th>
-                    <th>Object Name</th>
-                    <th>Rate</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Rows for input -->
-                <tr>
-                    <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
-                    <td><input type="text" class="name" onchange="updateTotal()" /></td>
-                    <td><input type="number" class="rate" onchange="updateTotal()" /></td>
-                    <td><span class="value">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
-                    <td><input type="text" class="name" onchange="updateTotal()" /></td>
-                    <td><input type="number" class="rate" onchange="updateTotal()" /></td>
-                    <td><span class="value">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
-                    <td><input type="text" class="name" onchange="updateTotal()" /></td>
-                    <td><input type="number" class="rate" onchange="updateTotal()" /></td>
-                    <td><span class="value">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
-                    <td><input type="text" class="name" onchange="updateTotal()" /></td>
-                    <td><input type="number" class="rate" onchange="updateTotal()" /></td>
-                    <td><span class="value">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
-                    <td><input type="text" class="name" onchange="updateTotal()" /></td>
-                    <td><input type="number" class="rate" onchange="updateTotal()" /></td>
-                    <td><span class="value">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
-                    <td><input type="text" class="name" onchange="updateTotal()" /></td>
-                    <td><input type="number" class="rate" onchange="updateTotal()" /></td>
-                    <td><span class="value">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
-                    <td><input type="text" class="name" onchange="updateTotal()" /></td>
-                    <td><input type="number" class="rate" onchange="updateTotal()" /></td>
-                    <td><span class="value">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
-                    <td><input type="text" class="name" onchange="updateTotal()" /></td>
-                    <td><input type="number" class="rate" onchange="updateTotal()" /></td>
-                    <td><span class="value">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
-                    <td><input type="text" class="name" onchange="updateTotal()" /></td>
-                    <td><input type="number" class="rate" onchange="updateTotal()" /></td>
-                    <td><span class="value">0</span></td>
-                </tr>
-                <!-- Total Row -->
-                <tr>
-                    <td colspan="3"><strong>Total</strong></td>
-                    <td><span id="totalValue">0</span></td>
-                </tr>
-            </tbody>
-        </table>
+        <h1>Choose Your Option</h1>
+        <div class="menu">
+            <button id="showBillbook">Store Billbook</button>
+            <button id="showCalculator">Calculator</button>
+        </div>
+        
+        <!-- Billbook Section -->
+        <div id="billbookSection" class="section">
+            <h2>Store Billbook</h2>
+            <table id="billTable">
+                <thead>
+                    <tr>
+                        <th>Quantity</th>
+                        <th>Object Name</th>
+                        <th>Rate</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows for input -->
+                    <!-- Add the same rows as before -->
+                    <tr>
+                        <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
+                        <td><input type="text" class="name" onchange="updateTotal()" /></td>
+                        <td><input type="number" class="rate" onchange="updateTotal()" /></td>
+                        <td><span class="value">0</span></td>
+                    </tr>
+                    <!-- Repeat the rows for a total of 10 items, as before -->
+                    <tr>
+                        <td colspan="3"><strong>Total</strong></td>
+                        <td><span id="totalValue">0</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Calculator Section -->
+        <div id="calculatorSection" class="section" style="display: none;">
+            <h2>Calculator</h2>
+            <div class="calculator">
+                <div class="display">
+                    <input type="text" id="display" disabled />
+                </div>
+                <div class="buttons">
+                    <button class="button" onclick="clearDisplay()">C</button>
+                    <button class="button" onclick="appendToDisplay('7')">7</button>
+                    <button class="button" onclick="appendToDisplay('8')">8</button>
+                    <button class="button" onclick="appendToDisplay('9')">9</button>
+                    <button class="button" onclick="appendToDisplay('/')">/</button>
+
+                    <button class="button" onclick="appendToDisplay('4')">4</button>
+                    <button class="button" onclick="appendToDisplay('5')">5</button>
+                    <button class="button" onclick="appendToDisplay('6')">6</button>
+                    <button class="button" onclick="appendToDisplay('*')">*</button>
+
+                    <button class="button" onclick="appendToDisplay('1')">1</button>
+                    <button class="button" onclick="appendToDisplay('2')">2</button>
+                    <button class="button" onclick="appendToDisplay('3')">3</button>
+                    <button class="button" onclick="appendToDisplay('-')">-</button>
+
+                    <button class="button" onclick="appendToDisplay('0')">0</button>
+                    <button class="button" onclick="appendToDisplay('.')">.</button>
+                    <button class="button" onclick="calculateResult()">=</button>
+                    <button class="button" onclick="appendToDisplay('+')">+</button>
+                </div>
+            </div>
+        </div>
+
     </div>
     <script src="script.js"></script>
 </body>
