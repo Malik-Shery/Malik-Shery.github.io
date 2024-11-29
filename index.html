@@ -121,14 +121,19 @@
 
     // Handle obstacles
     function updateObstacles() {
-        // Add new obstacles
+        // Add new obstacles at intervals
         if (Math.random() < 0.02) {
-            const obstacleHeight = Math.random() * 40 + 20; // Generate obstacles of random heights
+            const obstacleHeight = Math.random() * 40 + 20; // Random obstacle height
+            const obstacleX = canvas.width; // Position at the right side
+            const gap = Math.random() * 100 + 50; // Random gap between obstacles
+
+            // Make sure that obstacles are placed with a gap
             obstacles.push({
-                x: canvas.width,
+                x: obstacleX,
                 y: canvas.height - obstacleHeight,
                 width: 30,
-                height: obstacleHeight
+                height: obstacleHeight,
+                gap: gap
             });
         }
 
@@ -140,6 +145,10 @@
             // Draw the obstacle
             ctx.fillStyle = "#8B4513"; // Obstacle color (brown)
             ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+
+            // Draw the gap (the area where the crocodile can jump)
+            ctx.fillStyle = "#87CEEB"; // Gap color (sky blue)
+            ctx.fillRect(obstacle.x, canvas.height - obstacle.gap - 50, obstacle.width, 50); // Create the gap between obstacles
 
             // Remove obstacles that move off the screen
             if (obstacle.x + obstacle.width < 0) {
@@ -153,8 +162,9 @@
     // Check for collisions with obstacles
     function checkCollisions() {
         for (const obstacle of obstacles) {
+            // Check if the crocodile is within the obstacle's area, and it's not in the jump gap
             if (crocX + crocWidth > obstacle.x && crocX < obstacle.x + obstacle.width &&
-                crocY + crocHeight > obstacle.y) {
+                (crocY + crocHeight > obstacle.y || crocY + crocHeight > canvas.height - obstacle.gap - 50)) {
                 gameOver();
             }
         }
