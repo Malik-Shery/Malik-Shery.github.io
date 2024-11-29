@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Play YouTube Video in Multiple Windows</title>
+  <title>Embed YouTube Video Multiple Times</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -42,8 +42,8 @@
     document.getElementById("playButton").addEventListener("click", function () {
       const url = document.getElementById("youtubeLink").value.trim();
 
-      // Regular Expression to validate YouTube URLs
-      const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)(\?.*)?$/;
+      // Regular Expression to validate and extract YouTube Video ID
+      const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
 
       const match = url.match(youtubeRegex);
 
@@ -53,4 +53,23 @@
       }
 
       // Extract Video ID
-      const videoId = match[4];
+      const videoId = match[1];
+
+      // Embed URL format for YouTube
+      const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+
+      // Get the container and clear it
+      const container = document.getElementById("videoContainer");
+      container.innerHTML = "";
+
+      // Create 10 iframes
+      for (let i = 0; i < 10; i++) {
+        const iframe = document.createElement("iframe");
+        iframe.src = embedUrl;
+        iframe.allow = "autoplay";
+        container.appendChild(iframe);
+      }
+    });
+  </script>
+</body>
+</html>
