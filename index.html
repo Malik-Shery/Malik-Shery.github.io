@@ -55,7 +55,8 @@
         const obstacleGeometry = new THREE.BoxGeometry(1, 1, 1);
         const obstacleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
         const obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
-        obstacle.position.set(Math.random() * 10 - 5, 1, -10);
+        // Randomly place obstacles
+        obstacle.position.set(Math.random() * 5 - 2.5, 1, -10); // Avoid obstacles near the player
         obstacles.push(obstacle);
         scene.add(obstacle);
     }
@@ -65,13 +66,21 @@
     let moveRight = false;
 
     window.addEventListener("keydown", function (event) {
-        if (event.key === "ArrowLeft") moveLeft = true;
-        if (event.key === "ArrowRight") moveRight = true;
+        if (event.key === "ArrowLeft") {
+            moveLeft = true;
+        }
+        if (event.key === "ArrowRight") {
+            moveRight = true;
+        }
     });
 
     window.addEventListener("keyup", function (event) {
-        if (event.key === "ArrowLeft") moveLeft = false;
-        if (event.key === "ArrowRight") moveRight = false;
+        if (event.key === "ArrowLeft") {
+            moveLeft = false;
+        }
+        if (event.key === "ArrowRight") {
+            moveRight = false;
+        }
     });
 
     // Update player position and obstacles
@@ -79,15 +88,19 @@
         if (gameOver) return;
 
         // Move the player left and right
-        if (moveLeft && player.position.x > -2) player.position.x -= playerSpeed;
-        if (moveRight && player.position.x < 2) player.position.x += playerSpeed;
+        if (moveLeft && player.position.x > -2) {
+            player.position.x -= playerSpeed;
+        }
+        if (moveRight && player.position.x < 2) {
+            player.position.x += playerSpeed;
+        }
 
         // Move obstacles
         for (let i = 0; i < obstacles.length; i++) {
             obstacles[i].position.z += playerSpeed * 5;  // Move obstacle towards the player
             if (obstacles[i].position.z > 5) {
                 obstacles[i].position.z = -10;  // Reset obstacle to the starting position
-                obstacles[i].position.x = Math.random() * 10 - 5;  // Random horizontal position
+                obstacles[i].position.x = Math.random() * 5 - 2.5;  // Random horizontal position
                 score++;
             }
             // Check for collision
