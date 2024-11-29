@@ -3,42 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Embed YouTube Video Multiple Times</title>
+    <title>ChatGPT Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #chat-container {
+            width: 350px;
+            height: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        #chat-box {
+            flex-grow: 1;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin-bottom: 15px;
+        }
+        .user-message {
+            text-align: right;
+            color: #0078d4;
+        }
+        .bot-message {
+            text-align: left;
+            color: #333;
+        }
+        #user-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+        #send-btn {
+            padding: 10px 20px;
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #send-btn:hover {
+            background-color: #005a8b;
+        }
+    </style>
 </head>
 <body>
-    <h1>Embed YouTube Video Multiple Times</h1>
-    <p>Enter a YouTube video link below:</p>
-    <input type="text" id="videoUrl" placeholder="Enter YouTube link here" style="width: 50%;">
-    <button onclick="embedVideos()">Play in 50 Frames</button>
-    <div id="videoFrames" style="margin-top: 20px;"></div>
 
-    <script>
-        function embedVideos() {
-            const urlInput = document.getElementById("videoUrl").value.trim();
-            const videoFramesDiv = document.getElementById("videoFrames");
-            videoFramesDiv.innerHTML = ""; // Clear any existing frames
+<div id="chat-container">
+    <div id="chat-box"></div>
+    <input type="text" id="user-input" placeholder="Type your message...">
+    <button id="send-btn">Send</button>
+</div>
 
-            // Extract YouTube video ID from URL
-            const match = urlInput.match(/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-            if (!match || match.length < 2) {
-                alert("Please enter a valid YouTube video link.");
-                return;
-            }
+<script>
+    const apiKey = 'YOUR_OPENAI_API_KEY'; // Replace with your OpenAI API key
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
 
-            const videoId = match[1];
+    sendBtn.addEventListener('click', sendMessage);
 
-            // Embed the video 50 times
-            for (let i = 0; i < 50; i++) {
-                const iframe = document.createElement("iframe");
-                iframe.width = "300";
-                iframe.height = "170";
-                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-                iframe.frameBorder = "0";
-                iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-                iframe.allowFullscreen = true;
-                videoFramesDiv.appendChild(iframe);
-            }
+    // Send the message to ChatGPT and display the response
+    async function sendMessage() {
+        const userMessage = userInput.value.trim();
+        if (userMessage === '') return;
+
+        // Display the user's message
+        appendMessage(userMessage, 'user');
+
+        // Clear the input field
+        userInput.value = '';
+
+        // Send the message to OpenAI and get the response
+        const botResponse = await getBotResponse(userMessage);
+        
+        // Display the bot's response
+        appendMessage(botResponse, 'bot');
+    }
+
+    // Function to append messages to the chat box
+    function appendMessage(message, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+        messageDiv.textContent = message;
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+    }
+
+    // Fetch response from OpenAI API
+    async function getBotResponse(message) {
+        try {
+            const response = await fetch('https://api.openai.com/v1/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'text-davinci-003', // GPT-3 model
+                    prompt: message,
+                    max_tokens: 150,
+                    temperature: 0.7
+                })
+            });
+            const data = await response.json();
+            return data.choices[0].text.trim();
+        } catch (error) {
+            console.error("Error fetching response from OpenAI:", error);
+            return "Sorry, I couldn't process your request.";
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
