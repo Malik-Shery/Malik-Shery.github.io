@@ -3,27 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Embed YouTube Video in 500 Tabs</title>
+    <title>Embed YouTube Video Multiple Times</title>
 </head>
 <body>
-    <h1>Embed YouTube Video in 500 Tabs</h1>
+    <h1>Embed YouTube Video Multiple Times</h1>
     <p>Enter a YouTube video link below:</p>
     <input type="text" id="videoUrl" placeholder="Enter YouTube link here" style="width: 50%;">
-    <button onclick="embedVideos()">Play in Batches</button>
+    <button onclick="embedVideos()">Play in 50 Frames</button>
     <div id="videoFrames" style="margin-top: 20px;"></div>
-    <div id="batchControls" style="margin-top: 20px;"></div>
 
     <script>
-        const BATCH_SIZE = 50; // Number of frames per batch
-        const TOTAL_FRAMES = 500; // Total number of frames
-        let currentBatch = 0;
-
         function embedVideos() {
             const urlInput = document.getElementById("videoUrl").value.trim();
             const videoFramesDiv = document.getElementById("videoFrames");
-            const batchControlsDiv = document.getElementById("batchControls");
-            videoFramesDiv.innerHTML = ""; // Clear existing frames
-            batchControlsDiv.innerHTML = ""; // Clear existing controls
+            videoFramesDiv.innerHTML = ""; // Clear any existing frames
 
             // Extract YouTube video ID from URL
             const match = urlInput.match(/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -33,31 +26,9 @@
             }
 
             const videoId = match[1];
-            currentBatch = 0; // Reset to the first batch
 
-            // Load the first batch and set up controls
-            loadBatch(videoId);
-            const nextButton = document.createElement("button");
-            nextButton.innerText = "Next Batch";
-            nextButton.onclick = () => loadBatch(videoId);
-            batchControlsDiv.appendChild(nextButton);
-        }
-
-        function loadBatch(videoId) {
-            const videoFramesDiv = document.getElementById("videoFrames");
-            if (currentBatch * BATCH_SIZE >= TOTAL_FRAMES) {
-                alert("All batches have been loaded.");
-                return;
-            }
-
-            // Clear existing frames
-            videoFramesDiv.innerHTML = "";
-
-            // Embed the current batch
-            for (let i = 0; i < BATCH_SIZE; i++) {
-                const frameIndex = currentBatch * BATCH_SIZE + i;
-                if (frameIndex >= TOTAL_FRAMES) break;
-
+            // Embed the video 50 times
+            for (let i = 0; i < 50; i++) {
                 const iframe = document.createElement("iframe");
                 iframe.width = "300";
                 iframe.height = "170";
@@ -67,8 +38,6 @@
                 iframe.allowFullscreen = true;
                 videoFramesDiv.appendChild(iframe);
             }
-
-            currentBatch++;
         }
     </script>
 </body>
