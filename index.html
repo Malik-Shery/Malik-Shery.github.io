@@ -4,129 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real-Time Chat</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        #chat-container {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        #chat-box {
-            flex-grow: 1;
-            overflow-y: scroll;
-            padding: 10px;
-            background-color: #fff;
-            border-bottom: 2px solid #ddd;
-        }
-        #message-input {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            font-size: 16px;
-        }
-        #send-button {
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        #send-button:hover {
-            background-color: #45a049;
-        }
-        .message {
-            background-color: #d3f8e2;
-            padding: 8px;
-            margin: 5px 0;
-            border-radius: 5px;
-            max-width: 80%;
-        }
-        .user-message {
-            background-color: #e1f0ff;
-            text-align: right;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="chat-container">
-    <div id="chat-box"></div>
-    <div>
-        <input type="text" id="message-input" placeholder="Type a message...">
+    <div id="chat-container">
+        <h2>Chat Room</h2>
+        <div id="messages"></div>
+        <input type="text" id="message-input" placeholder="Type your message" />
         <button id="send-button">Send</button>
     </div>
-</div>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
-<script>
-    // Replace with your Firebase configuration
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        databaseURL: "YOUR_DATABASE_URL",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
-
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-
-    // Get elements
-    const chatBox = document.getElementById("chat-box");
-    const messageInput = document.getElementById("message-input");
-    const sendButton = document.getElementById("send-button");
-
-    // Listen for new messages in the database
-    database.ref("messages").on("child_added", function(snapshot) {
-        const message = snapshot.val();
-        displayMessage(message.text, message.user);
-    });
-
-    // Display message in chat box
-    function displayMessage(message, user) {
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("message");
-        if (user === "You") {
-            messageElement.classList.add("user-message");
-        }
-        messageElement.textContent = message;
-        chatBox.appendChild(messageElement);
-        chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll to the latest message
-    }
-
-    // Send message to Firebase when button is clicked
-    sendButton.addEventListener("click", function() {
-        const messageText = messageInput.value.trim();
-        if (messageText !== "") {
-            const user = "You"; // This can be dynamic, for example, based on user login
-            database.ref("messages").push({
-                text: messageText,
-                user: user
-            });
-            messageInput.value = ""; // Clear the input after sending the message
-        }
-    });
-
-    // Optionally, send message when pressing Enter
-    messageInput.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            sendButton.click();
-        }
-    });
-
-</script>
+    <script src="script.js"></script>
 
 </body>
 </html>
