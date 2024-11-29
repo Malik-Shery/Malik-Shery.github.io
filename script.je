@@ -48,10 +48,9 @@ function sendMessage() {
 }
 
 // Listen for the send button click
-sendButton.addEventListener("click", sendMessage);
-
-// Load messages when the page loads
-loadMessages();
+sendButton.addEventListener("click", function() {
+    sendMessage();
+});
 
 // Listen for Enter key press to send message
 messageInput.addEventListener("keypress", function(event) {
@@ -59,3 +58,6 @@ messageInput.addEventListener("keypress", function(event) {
         sendMessage();
     }
 });
+
+// Load the messages when the page loads
+window.onload = loadMessages;
