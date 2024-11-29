@@ -3,160 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Running Man Game</title>
+    <title>Real-Time Chat</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
-            overflow: hidden;
-            background-color: #87CEEB; /* Sky Blue */
+            padding: 0;
         }
-        canvas {
-            display: block;
+        #chat-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        #startButton {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 24px;
-            padding: 20px;
+        #chat-box {
+            flex-grow: 1;
+            overflow-y: scroll;
+            padding: 10px;
+            background-color: #fff;
+            border-bottom: 2px solid #ddd;
+        }
+        #message-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            font-size: 16px;
+        }
+        #send-button {
+            padding: 10px;
             background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 10px;
             cursor: pointer;
         }
-        #startButton:hover {
+        #send-button:hover {
             background-color: #45a049;
+        }
+        .message {
+            background-color: #d3f8e2;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            max-width: 80%;
+        }
+        .user-message {
+            background-color: #e1f0ff;
+            text-align: right;
         }
     </style>
 </head>
 <body>
 
-<!-- Start Button -->
-<button id="startButton">Start Game</button>
+<div id="chat-container">
+    <div id="chat-box"></div>
+    <div>
+        <input type="text" id="message-input" placeholder="Type a message...">
+        <button id="send-button">Send</button>
+    </div>
+</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
 <script>
-    let scene, camera, renderer;
-    let player, playerSpeed = 0.1;
-    let ground;
-    let gameOver = false;
-    let gameStarted = false;
+    // Replace with your Firebase configuration
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        databaseURL: "YOUR_DATABASE_URL",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
 
-    // Initialize the scene (only creates the scene and player, does not start the game)
-    function init() {
-        // Create scene, camera, and renderer
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-        // Add a ground
-        const groundGeometry = new THREE.PlaneGeometry(200, 200);
-        const groundMaterial = new THREE.MeshBasicMaterial({ color: 0x228B22, side: THREE.DoubleSide });
-        ground = new THREE.Mesh(groundGeometry, groundMaterial);
-        ground.rotation.x = -Math.PI / 2; // Rotate to lay flat
-        scene.add(ground);
+    // Get elements
+    const chatBox = document.getElementById("chat-box");
+    const messageInput = document.getElementById("message-input");
+    const sendButton = document.getElementById("send-button");
 
-        // Create the "man" (represented by a simple box)
-        const playerGeometry = new THREE.BoxGeometry(1, 2, 1);
-        const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x0000FF });
-        player = new THREE.Mesh(playerGeometry, playerMaterial);
-        player.position.set(0, 1, 0);
-        scene.add(player);
+    // Listen for new messages in the database
+    database.ref("messages").on("child_added", function(snapshot) {
+        const message = snapshot.val();
+        displayMessage(message.text, message.user);
+    });
 
-        // Add obstacles to avoid
-        createObstacle();
-
-        // Set the camera position to follow the player
-        camera.position.set(0, 2, 5);
-        camera.lookAt(player.position);
-
-        // Hide the game initially until the start button is clicked
-        renderer.domElement.style.display = "none";
+    // Display message in chat box
+    function displayMessage(message, user) {
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message");
+        if (user === "You") {
+            messageElement.classList.add("user-message");
+        }
+        messageElement.textContent = message;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll to the latest message
     }
 
-    // Create obstacles
-    function createObstacle() {
-        const obstacleGeometry = new THREE.BoxGeometry(3, 1, 1);
-        const obstacleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-        const obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
-        obstacle.position.set(Math.random() * 10 - 5, 0.5, -10); // Position obstacles randomly
-        scene.add(obstacle);
-    }
+    // Send message to Firebase when button is clicked
+    sendButton.addEventListener("click", function() {
+        const messageText = messageInput.value.trim();
+        if (messageText !== "") {
+            const user = "You"; // This can be dynamic, for example, based on user login
+            database.ref("messages").push({
+                text: messageText,
+                user: user
+            });
+            messageInput.value = ""; // Clear the input after sending the message
+        }
+    });
 
-    // Start the game
-    function startGame() {
-        document.getElementById("startButton").style.display = "none"; // Hide start button
-        renderer.domElement.style.display = "block"; // Show the 3D canvas
-
-        gameStarted = true;
-        animate();
-    }
-
-    // Update function to handle movement and animation
-    function update() {
-        if (gameOver) return;
-
-        // Move the player forward (simulate running)
-        player.position.z -= playerSpeed;
-
-        // Move obstacles toward the player
-        scene.children.forEach(child => {
-            if (child.position.z > player.position.z + 20 && child !== player && child !== ground) {
-                child.position.z = -10;  // Reset obstacle position behind the player
-                child.position.x = Math.random() * 10 - 5; // Random horizontal position
-            } else if (child !== player && child !== ground) {
-                child.position.z += playerSpeed;  // Move obstacle forward
-            }
-        });
-
-        // Collision detection (simple)
-        scene.children.forEach(child => {
-            if (child !== player && child !== ground) {
-                const dist = player.position.distanceTo(child.position);
-                if (dist < 2) {
-                    gameOver = true;
-                    alert("Game Over! You hit an obstacle!");
-                    resetGame();
-                }
-            }
-        });
-    }
-
-    // Reset game
-    function resetGame() {
-        gameOver = false;
-        player.position.set(0, 1, 0);
-        score = 0;
-        scene.children.forEach(child => {
-            if (child !== ground && child !== player) {
-                scene.remove(child); // Remove obstacles
-            }
-        });
-        createObstacle(); // Add a new obstacle
-    }
-
-    // Animate the scene
-    function animate() {
-        if (!gameStarted) return; // Wait for the game to start
-
-        requestAnimationFrame(animate);
-
-        // Update game logic
-        update();
-
-        // Render the scene
-        renderer.render(scene, camera);
-    }
-
-    // Initialize the game
-    init();
-
-    // Listen for the start button click
-    document.getElementById("startButton").addEventListener("click", startGame);
+    // Optionally, send message when pressing Enter
+    messageInput.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            sendButton.click();
+        }
+    });
 
 </script>
 
