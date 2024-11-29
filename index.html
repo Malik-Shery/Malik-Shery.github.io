@@ -3,157 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subway Surfers Game</title>
+    <title>3D Subway Surfers Game</title>
     <style>
         body {
             margin: 0;
-            padding: 0;
             overflow: hidden;
-            background-color: #f0f0f0;
+            background-color: #87CEEB; /* Sky Blue */
         }
         canvas {
             display: block;
-            margin: 0 auto;
-            background-color: #87CEEB; /* Sky blue background */
         }
     </style>
 </head>
 <body>
 
-<canvas id="gameCanvas" width="800" height="400"></canvas>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-
-    let isGameRunning = true;
-    let characterY = canvas.height - 100;
-    let characterX = 100;
-    let characterWidth = 50;
-    let characterHeight = 50;
-    let gravity = 1;
-    let jumpStrength = 20;
-    let isJumping = false;
-    let jumpSpeed = 0;
-    let score = 0;
-
-    // Obstacles
+    let scene, camera, renderer;
+    let player, playerSpeed = 0.1;
     let obstacles = [];
-    let obstacleSpeed = 3;
-    let obstacleWidth = 50;
-    let obstacleHeight = 50;
-    
-    // Game loop
-    function gameLoop() {
-        if (!isGameRunning) return;
+    let score = 0;
+    let gameOver = false;
 
-        // Clear canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Initialize the scene
+    function init() {
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-        // Update the character
-        updateCharacter();
-        
-        // Create and move obstacles
-        createObstacles();
-        moveObstacles();
+        // Player (Crocodile or Character)
+        const playerGeometry = new THREE.BoxGeometry(1, 2, 1);
+        const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        player = new THREE.Mesh(playerGeometry, playerMaterial);
+        player.position.set(0, 1, 0);
+        scene.add(player);
 
-        // Draw score
-        drawScore();
+        // Add obstacles
+        createObstacle();
 
-        // Check for collisions
-        checkCollisions();
+        // Set camera position
+        camera.position.z = 5;
 
-        // Repeat the game loop
-        requestAnimationFrame(gameLoop);
+        // Start game loop
+        animate();
     }
 
-    // Update the character's position (jumping)
-    function updateCharacter() {
-        if (isJumping) {
-            characterY -= jumpSpeed;
-            jumpSpeed -= gravity; // Gravity pulls the character down
-            if (characterY >= canvas.height - 100) {
-                characterY = canvas.height - 100;
-                isJumping = false;
-                jumpSpeed = 0;
-            }
-        }
-        
-        // Draw the character (a simple square for now)
-        ctx.fillStyle = "#FFD700"; // Gold color for the character
-        ctx.fillRect(characterX, characterY, characterWidth, characterHeight);
+    // Create obstacles
+    function createObstacle() {
+        const obstacleGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const obstacleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
+        obstacle.position.set(Math.random() * 10 - 5, 1, -10);
+        obstacles.push(obstacle);
+        scene.add(obstacle);
     }
 
-    // Handle obstacle creation and movement
-    function createObstacles() {
-        if (Math.random() < 0.02) { // Randomly generate obstacles
-            const obstacleX = canvas.width;
-            const obstacleY = canvas.height - obstacleHeight;
-            obstacles.push({x: obstacleX, y: obstacleY});
-        }
-    }
+    // Handle player movement (left-right and jump)
+    let moveLeft = false;
+    let moveRight = false;
 
-    function moveObstacles() {
+    window.addEventListener("keydown", function (event) {
+        if (event.key === "ArrowLeft") moveLeft = true;
+        if (event.key === "ArrowRight") moveRight = true;
+    });
+
+    window.addEventListener("keyup", function (event) {
+        if (event.key === "ArrowLeft") moveLeft = false;
+        if (event.key === "ArrowRight") moveRight = false;
+    });
+
+    // Update player position and obstacles
+    function update() {
+        if (gameOver) return;
+
+        // Move the player left and right
+        if (moveLeft && player.position.x > -2) player.position.x -= playerSpeed;
+        if (moveRight && player.position.x < 2) player.position.x += playerSpeed;
+
+        // Move obstacles
         for (let i = 0; i < obstacles.length; i++) {
-            obstacles[i].x -= obstacleSpeed;
-
-            // Draw the obstacles
-            ctx.fillStyle = "#8B4513"; // Brown color for obstacles
-            ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacleWidth, obstacleHeight);
-
-            // Remove obstacles off the screen
-            if (obstacles[i].x + obstacleWidth < 0) {
-                obstacles.splice(i, 1);
-                score++; // Increase score when obstacle is passed
-                i--;
+            obstacles[i].position.z += playerSpeed * 5;  // Move obstacle towards the player
+            if (obstacles[i].position.z > 5) {
+                obstacles[i].position.z = -10;  // Reset obstacle to the starting position
+                obstacles[i].position.x = Math.random() * 10 - 5;  // Random horizontal position
+                score++;
+            }
+            // Check for collision
+            if (Math.abs(player.position.x - obstacles[i].position.x) < 1 &&
+                Math.abs(player.position.z - obstacles[i].position.z) < 1) {
+                gameOver = true;
+                alert("Game Over! Your Score: " + score);
+                resetGame();
             }
         }
-    }
-
-    // Draw the score
-    function drawScore() {
-        ctx.font = "20px Arial";
-        ctx.fillStyle = "#000";
-        ctx.fillText("Score: " + score, 20, 30);
-    }
-
-    // Check for collisions with obstacles
-    function checkCollisions() {
-        for (let i = 0; i < obstacles.length; i++) {
-            if (characterX + characterWidth > obstacles[i].x && characterX < obstacles[i].x + obstacleWidth &&
-                characterY + characterHeight > obstacles[i].y) {
-                // Collision detected
-                gameOver();
-            }
-        }
-    }
-
-    // Game over function
-    function gameOver() {
-        isGameRunning = false;
-        alert("Game Over! Your score: " + score);
-        resetGame();
     }
 
     // Reset the game
     function resetGame() {
+        gameOver = false;
+        player.position.set(0, 1, 0);
         score = 0;
-        characterY = canvas.height - 100;
         obstacles = [];
-        isGameRunning = true;
-        gameLoop();
+        for (let i = 0; i < 5; i++) {
+            createObstacle();
+        }
     }
 
-    // Listen for the jump event (click to jump)
-    canvas.addEventListener("click", function() {
-        if (!isJumping) {
-            isJumping = true;
-            jumpSpeed = jumpStrength;
-        }
-    });
+    // Render the scene
+    function animate() {
+        requestAnimationFrame(animate);
 
-    // Start the game loop
-    gameLoop();
+        // Update the game logic
+        update();
+
+        // Render the scene
+        renderer.render(scene, camera);
+    }
+
+    // Initialize the game
+    init();
 </script>
 
 </body>
