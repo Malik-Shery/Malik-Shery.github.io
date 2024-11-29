@@ -49,7 +49,7 @@
     const startButton = document.getElementById("startButton");
 
     let isGameRunning = false;
-    let crocX = 50, crocY = canvas.height - 100, crocWidth = 50, crocHeight = 50;
+    let crocX = 50, crocY = canvas.height - 80, crocWidth = 50, crocHeight = 50;
     let crocSpeed = 2;
     let isJumping = false, jumpHeight = 0;
     let obstacles = [];
@@ -85,7 +85,7 @@
     function startGame() {
         isGameRunning = true;
         score = 0;
-        crocY = canvas.height - 100;
+        crocY = canvas.height - 80;
         crocSpeed = 2;
         obstacles = [];
         obstacleSpeed = 2;
@@ -108,8 +108,8 @@
         if (isJumping) {
             crocY -= jumpHeight;
             jumpHeight -= gravity;
-            if (crocY >= canvas.height - 100) {
-                crocY = canvas.height - 100;
+            if (crocY >= canvas.height - 80) {
+                crocY = canvas.height - 80;
                 isJumping = false;
             }
         }
@@ -123,7 +123,7 @@
     function updateObstacles() {
         // Add new obstacles
         if (Math.random() < 0.02) {
-            const obstacleHeight = Math.random() * 20 + 20;
+            const obstacleHeight = Math.random() * 40 + 20; // Generate obstacles of random heights
             obstacles.push({
                 x: canvas.width,
                 y: canvas.height - obstacleHeight,
