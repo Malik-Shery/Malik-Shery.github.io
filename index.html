@@ -4,19 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Open YouTube Video in 10 Tabs</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <h1>Open YouTube Video in 10 Tabs</h1>
   <p>Enter a YouTube video link below:</p>
-  <input type="text" id="youtubeLink" placeholder="https://youtu.be/example">
+  <input type="text" id="youtubeLink" placeholder="https://youtu.be/your-video-link" size="40">
   <button id="openButton">Open in 10 Tabs</button>
 
-  <!-- Add your updated JavaScript code here -->
   <script>
     document.getElementById("openButton").addEventListener("click", function () {
       const url = document.getElementById("youtubeLink").value.trim();
 
-      // Regular Expression to validate YouTube URLs (with or without query parameters)
+      // Regular Expression to validate YouTube URLs
       const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]+(\?.*)?$/;
 
       if (!youtubeRegex.test(url)) {
@@ -24,9 +38,11 @@
         return;
       }
 
-      // Open video in 10 tabs
+      // Function to open 10 tabs with a slight delay
       for (let i = 0; i < 10; i++) {
-        window.open(url, "_blank");
+        setTimeout(() => {
+          window.open(url, "_blank");
+        }, i * 500); // Opens a new tab every 500ms to avoid blockers
       }
     });
   </script>
