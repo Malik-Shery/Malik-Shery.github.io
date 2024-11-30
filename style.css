@@ -1,4 +1,4 @@
-/* Style.css */
+/* Global Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
@@ -41,110 +41,84 @@ button:hover {
     background-color: #3498db;
 }
 
-button:active {
-    background-color: #1abc9c;
-}
-
-.section {
-    display: none;
-}
-
+/* Billbook Styles */
 #billbookSection {
     display: block;
-}
-
-.calculator {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-}
-
-.display {
-    background-color: #2c3e50;
+    background-color: black;
     color: white;
+    border: 2px solid white;
     padding: 20px;
-    text-align: right;
-    font-size: 2em;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid white;
+    color: white;
+}
+
+.quantity-column {
+    width: 20%;
+}
+
+input {
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+
+#totalValue {
+    font-weight: bold;
+    color: white;
+}
+
+/* Calculator Styles */
+#calculatorSection .calculator {
+    background-color: black;
+    border: 2px solid white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    margin: 0 auto;
+}
+
+#calculatorSection .display {
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 #display {
     width: 100%;
     border: none;
-    background: transparent;
-    color: white;
-    font-size: 2em;
+    font-size: 1.5rem;
     text-align: right;
+    color: black;
 }
 
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    padding: 20px;
+    margin-top: 20px;
 }
 
 .button {
-    padding: 20px;
-    font-size: 1.5em;
-    background-color: #ecf0f1;
+    background-color: white;
+    color: brown;
+    font-size: 1.2rem;
+    padding: 10px;
     border: none;
     border-radius: 5px;
+    text-align: center;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 .button:hover {
-    background-color: #bdc3c7;
-}
-
-button:active {
-    background-color: #95a5a6;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-}
-
-th, td {
-    padding: 12px;
-    text-align: center;
-    border: 1px solid #ddd;
-}
-
-th {
-    background-color: #2980b9;
-    color: white;
-}
-
-td {
-    background-color: #ecf0f1;
-}
-
-input[type="number"], input[type="text"] {
-    padding: 8px;
-    width: 100%;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-input[type="number"]:focus, input[type="text"]:focus {
-    outline: none;
-    border-color: #2980b9;
-}
-
-input[type="number"] {
-    text-align: center;
-}
-
-#totalValue {
-    font-size: 18px;
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-tr:last-child {
-    background-color: #f39c12;
+    background-color: #f0f0f0;
 }
