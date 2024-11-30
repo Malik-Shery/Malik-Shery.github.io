@@ -1,43 +1,49 @@
+// Toggle sections
+document.getElementById("showBillbook").onclick = () => {
+    document.getElementById("billbookSection").style.display = "block";
+    document.getElementById("calculatorSection").style.display = "none";
+};
+
+document.getElementById("showCalculator").onclick = () => {
+    document.getElementById("calculatorSection").style.display = "block";
+    document.getElementById("billbookSection").style.display = "none";
+};
+
+// Update total in Billbook
 function updateTotal() {
     let total = 0;
-    const rows = document.querySelectorAll('#billTable tbody tr');
-    rows.forEach((row, index) => {
-        if (index < 10) { // Skip the total row
-            const quantity = parseFloat(row.querySelector('.quantity').value) || 0;
-            const rate = parseFloat(row.querySelector('.rate').value) || 0;
-            const value = quantity * rate;
-            row.querySelector('.value').textContent = value.toFixed(2);
-            total += value;
-        }
+    const rows = document.querySelectorAll("#billTable tbody tr");
+
+    rows.forEach(row => {
+        const quantity = parseFloat(row.querySelector(".quantity").value) || 0;
+        const rate = parseFloat(row.querySelector(".rate").value) || 0;
+        const value = quantity * rate;
+        row.querySelector(".value").textContent = value.toFixed(2);
+        total += value;
     });
-    document.getElementById('totalValue').textContent = total.toFixed(2);
+
+    document.getElementById("totalValue").textContent = total.toFixed(2);
 }
 
-function appendToDisplay(value) {
-    const display = document.getElementById('display');
-    display.value += value;
+// Calculator functionality
+let calcDisplay = "";
+
+function press(key) {
+    calcDisplay += key;
+    document.getElementById("calcDisplay").value = calcDisplay;
 }
 
-function clearDisplay() {
-    const display = document.getElementById('display');
-    display.value = '';
-}
-
-function calculateResult() {
-    const display = document.getElementById('display');
+function calculate() {
     try {
-        display.value = eval(display.value);
+        calcDisplay = eval(calcDisplay).toString();
+        document.getElementById("calcDisplay").value = calcDisplay;
     } catch {
-        display.value = 'Error';
+        document.getElementById("calcDisplay").value = "Error";
+        calcDisplay = "";
     }
 }
 
-document.getElementById('showBillbook').addEventListener('click', () => {
-    document.getElementById('billbookSection').style.display = 'block';
-    document.getElementById('calculatorSection').style.display = 'none';
-});
-
-document.getElementById('showCalculator').addEventListener('click', () => {
-    document.getElementById('billbookSection').style.display = 'none';
-    document.getElementById('calculatorSection').style.display = 'block';
-});
+function clearDisplay() {
+    calcDisplay = "";
+    document.getElementById("calcDisplay").value = "";
+}
