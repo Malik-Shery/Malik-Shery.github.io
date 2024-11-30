@@ -1,25 +1,18 @@
-// Billbook Script
 function updateTotal() {
     let total = 0;
     const rows = document.querySelectorAll('#billTable tbody tr');
     rows.forEach((row, index) => {
-        if (index < rows.length - 1) {
-            const quantityInput = row.querySelector('.quantity');
-            const rateInput = row.querySelector('.rate');
-            const valueSpan = row.querySelector('.value');
-
-            const quantity = parseFloat(quantityInput.value) || 0;
-            const rate = parseFloat(rateInput.value) || 0;
-
+        if (index < 10) { // Skip the total row
+            const quantity = parseFloat(row.querySelector('.quantity').value) || 0;
+            const rate = parseFloat(row.querySelector('.rate').value) || 0;
             const value = quantity * rate;
-            valueSpan.textContent = value.toFixed(2);
+            row.querySelector('.value').textContent = value.toFixed(2);
             total += value;
         }
     });
     document.getElementById('totalValue').textContent = total.toFixed(2);
 }
 
-// Calculator Script
 function appendToDisplay(value) {
     const display = document.getElementById('display');
     display.value += value;
@@ -39,13 +32,12 @@ function calculateResult() {
     }
 }
 
-// Navigation Script
 document.getElementById('showBillbook').addEventListener('click', () => {
     document.getElementById('billbookSection').style.display = 'block';
     document.getElementById('calculatorSection').style.display = 'none';
 });
 
 document.getElementById('showCalculator').addEventListener('click', () => {
-    document.getElementById('calculatorSection').style.display = 'block';
     document.getElementById('billbookSection').style.display = 'none';
+    document.getElementById('calculatorSection').style.display = 'block';
 });
