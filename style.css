@@ -8,15 +8,15 @@ body {
 }
 
 .container {
-    width: 80%;
-    margin: 50px auto;
+    width: 90%;
+    margin: 20px auto;
     padding: 20px;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
+h1, h2 {
     text-align: center;
     color: #2c3e50;
 }
@@ -24,7 +24,7 @@ h1 {
 .menu {
     display: flex;
     justify-content: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 button {
@@ -37,22 +37,18 @@ button {
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #3498db;
-}
-
 /* Billbook Styles */
-#billbookSection {
-    display: block;
+.billbook-wrapper {
+    max-width: 100%;
     overflow-x: auto;
-    background-color: black;
-    color: white;
-    padding: 20px;
+    background: black;
+    padding: 10px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
 th, td {
@@ -66,49 +62,37 @@ input {
     background-color: black;
     color: white;
     border: 1px solid white;
-    border-radius: 4px; /* Curvy Box Effect */
+    border-radius: 6px; /* Curvy Box Effect */
     padding: 5px;
     text-align: center;
 }
 
 .quantity-column {
-    width: 25%; /* Quantity column horizontally long */
-}
-
-#totalValue {
-    font-weight: bold;
-    color: white;
+    width: 25%;
 }
 
 /* Calculator Styles */
-#calculatorSection .calculator {
+.calculator {
     background-color: black;
-    border: 2px solid white;
+    border: 3px solid white;
     border-radius: 10px;
     padding: 20px;
     width: 300px;
     margin: 0 auto;
 }
 
-#calculatorSection .display {
+.display {
     background-color: white;
+    color: black;
     padding: 10px;
     border-radius: 5px;
-    text-align: right;
-}
-
-#display {
-    width: 100%;
-    border: none;
     font-size: 1.5rem;
-    color: black;
 }
 
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    margin-top: 20px;
 }
 
 .button {
@@ -116,12 +100,6 @@ input {
     color: brown;
     font-size: 1.2rem;
     padding: 10px;
-    border: none;
     border-radius: 5px;
-    text-align: center;
     cursor: pointer;
-}
-
-.button:hover {
-    background-color: #f0f0f0;
 }
