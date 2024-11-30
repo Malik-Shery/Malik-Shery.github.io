@@ -1,49 +1,54 @@
-// Toggle sections
-document.getElementById("showBillbook").onclick = () => {
-    document.getElementById("billbookSection").style.display = "block";
-    document.getElementById("calculatorSection").style.display = "none";
-};
+function showBillbook() {
+    document.getElementById("billbook").style.display = "block";
+    document.getElementById("calculator").style.display = "none";
+}
 
-document.getElementById("showCalculator").onclick = () => {
-    document.getElementById("calculatorSection").style.display = "block";
-    document.getElementById("billbookSection").style.display = "none";
-};
+function showCalculator() {
+    document.getElementById("calculator").style.display = "block";
+    document.getElementById("billbook").style.display = "none";
+}
 
-// Update total in Billbook
 function updateTotal() {
+    const rows = document.querySelectorAll("#billbook table tbody tr");
     let total = 0;
-    const rows = document.querySelectorAll("#billTable tbody tr");
 
-    rows.forEach(row => {
-        const quantity = parseFloat(row.querySelector(".quantity").value) || 0;
-        const rate = parseFloat(row.querySelector(".rate").value) || 0;
-        const value = quantity * rate;
-        row.querySelector(".value").textContent = value.toFixed(2);
-        total += value;
+    rows.forEach((row, index) => {
+        if (index < rows.length - 1) {
+            const quantity = parseFloat(row.querySelector(".quantity").value) || 0;
+            const rate = parseFloat(row.querySelector(".rate").value) || 0;
+            const value = quantity * rate;
+
+            row.querySelector(".value").textContent = value.toFixed(2);
+            total += value;
+        }
     });
 
     document.getElementById("totalValue").textContent = total.toFixed(2);
 }
 
-// Calculator functionality
-let calcDisplay = "";
+// Calculator Functions
+let displayValue = "";
 
-function press(key) {
-    calcDisplay += key;
-    document.getElementById("calcDisplay").value = calcDisplay;
+function appendNumber(number) {
+    displayValue += number;
+    document.getElementById("display").value = displayValue;
+}
+
+function appendOperator(operator) {
+    displayValue += ` ${operator} `;
+    document.getElementById("display").value = displayValue;
 }
 
 function calculate() {
     try {
-        calcDisplay = eval(calcDisplay).toString();
-        document.getElementById("calcDisplay").value = calcDisplay;
-    } catch {
-        document.getElementById("calcDisplay").value = "Error";
-        calcDisplay = "";
+        displayValue = eval(displayValue).toString();
+        document.getElementById("display").value = displayValue;
+    } catch (error) {
+        document.getElementById("display").value = "Error";
     }
 }
 
 function clearDisplay() {
-    calcDisplay = "";
-    document.getElementById("calcDisplay").value = "";
+    displayValue = "";
+    document.getElementById("display").value = "";
 }
