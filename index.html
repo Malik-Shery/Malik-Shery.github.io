@@ -24,16 +24,8 @@
                         <th style="width: 20%;">Value</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- 10 Static Rows -->
-                    ${Array.from({ length: 10 }).map(() => `
-                        <tr>
-                            <td><input type="number" class="input-box" oninput="updateTotal(this)" /></td>
-                            <td><input type="text" class="input-box" /></td>
-                            <td><input type="number" class="input-box" oninput="updateTotal(this)" /></td>
-                            <td><span class="value">0.00</span></td>
-                        </tr>
-                    `).join('')}
+                <tbody id="billbook-body">
+                    <!-- Rows will be generated dynamically -->
                 </tbody>
                 <tfoot>
                     <tr>
