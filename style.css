@@ -44,9 +44,9 @@ button:hover {
 /* Billbook Styles */
 #billbookSection {
     display: block;
+    overflow-x: auto;
     background-color: black;
     color: white;
-    border: 2px solid white;
     padding: 20px;
 }
 
@@ -62,14 +62,17 @@ th, td {
     color: white;
 }
 
-.quantity-column {
-    width: 20%;
-}
-
 input {
     background-color: black;
     color: white;
     border: 1px solid white;
+    border-radius: 4px; /* Curvy Box Effect */
+    padding: 5px;
+    text-align: center;
+}
+
+.quantity-column {
+    width: 25%; /* Quantity column horizontally long */
 }
 
 #totalValue {
@@ -91,13 +94,13 @@ input {
     background-color: white;
     padding: 10px;
     border-radius: 5px;
+    text-align: right;
 }
 
 #display {
     width: 100%;
     border: none;
     font-size: 1.5rem;
-    text-align: right;
     color: black;
 }
 
