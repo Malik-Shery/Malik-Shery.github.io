@@ -7,6 +7,7 @@ function showBillbook() {
 function showCalculator() {
     document.getElementById('billbook').style.display = 'none';
     document.getElementById('calculator').style.display = 'block';
+    document.getElementById('display').disabled = false; // Allow keyboard typing
 }
 
 // Update Total Value in Billbook
@@ -55,3 +56,16 @@ function clearDisplay() {
 function updateCalculatorDisplay() {
     document.getElementById('display').value = displayValue;
 }
+
+// Keyboard Input for Calculator
+document.addEventListener('keydown', (event) => {
+    const allowedKeys = '0123456789+-*/.()';
+    if (allowedKeys.includes(event.key)) {
+        appendNumber(event.key);
+    } else if (event.key === 'Enter') {
+        calculate();
+    } else if (event.key === 'Backspace') {
+        displayValue = displayValue.slice(0, -1);
+        updateCalculatorDisplay();
+    }
+});
