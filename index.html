@@ -20,22 +20,22 @@
             <table id="billTable">
                 <thead>
                     <tr>
-                        <th>Quantity</th>
+                        <th class="quantity-column">Quantity</th>
                         <th>Object Name</th>
                         <th>Rate</th>
                         <th>Value</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Rows for input -->
-                    <!-- Add the same rows as before -->
+                    <!-- 10 Rows -->
                     <tr>
                         <td><input type="number" class="quantity" onchange="updateTotal()" /></td>
                         <td><input type="text" class="name" onchange="updateTotal()" /></td>
                         <td><input type="number" class="rate" onchange="updateTotal()" /></td>
                         <td><span class="value">0</span></td>
                     </tr>
-                    <!-- Repeat the rows for a total of 10 items, as before -->
+                    <!-- Repeat the above row structure for 9 more rows -->
+                    <!-- Total Row -->
                     <tr>
                         <td colspan="3"><strong>Total</strong></td>
                         <td><span id="totalValue">0</span></td>
