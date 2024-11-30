@@ -14,6 +14,11 @@ function showCalculator() {
 // Generate 40 rows dynamically for the Billbook
 function generateBillbookRows() {
     const billbookBody = document.getElementById("billbook-body");
+    if (!billbookBody) {
+        console.error("Billbook body element not found.");
+        return;
+    }
+
     billbookBody.innerHTML = ""; // Clear existing rows
 
     for (let i = 0; i < 40; i++) {
@@ -28,6 +33,8 @@ function generateBillbookRows() {
 
         billbookBody.appendChild(row);
     }
+
+    console.log("40 rows have been generated successfully.");
 }
 
 // Update the total value
