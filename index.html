@@ -25,13 +25,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Static 10 rows -->
-                    <tr>
-                        <td><input type="number" class="input-box" oninput="updateTotal(this)" /></td>
-                        <td><input type="text" class="input-box" /></td>
-                        <td><input type="number" class="input-box" oninput="updateTotal(this)" /></td>
-                        <td><span class="value">0.00</span></td>
-                    </tr>
+                    <!-- 10 Static Rows -->
+                    ${Array.from({ length: 10 }).map(() => `
+                        <tr>
+                            <td><input type="number" class="input-box" oninput="updateTotal(this)" /></td>
+                            <td><input type="text" class="input-box" /></td>
+                            <td><input type="number" class="input-box" oninput="updateTotal(this)" /></td>
+                            <td><span class="value">0.00</span></td>
+                        </tr>
+                    `).join('')}
                 </tbody>
                 <tfoot>
                     <tr>
