@@ -1,71 +1,83 @@
-// Switch between Billbook and Calculator
+// Show Billbook
 function showBillbook() {
-    document.getElementById('billbook').style.display = 'block';
-    document.getElementById('calculator').style.display = 'none';
+    document.getElementById("billbook").style.display = "block";
+    document.getElementById("calculator").style.display = "none";
+    generateBillbookRows();
 }
 
+// Show Calculator
 function showCalculator() {
-    document.getElementById('billbook').style.display = 'none';
-    document.getElementById('calculator').style.display = 'block';
-    document.getElementById('display').disabled = false; // Allow keyboard typing
+    document.getElementById("billbook").style.display = "none";
+    document.getElementById("calculator").style.display = "block";
 }
 
-// Update Total Value in Billbook
-function updateTotal(element) {
-    const row = element.parentElement.parentElement;
-    const quantity = parseFloat(row.cells[0].children[0].value) || 0;
-    const rate = parseFloat(row.cells[2].children[0].value) || 0;
-    const value = quantity * rate;
-    row.cells[3].children[0].textContent = value.toFixed(2);
+// Generate 40 rows dynamically for the Billbook
+function generateBillbookRows() {
+    const billbookBody = document.getElementById("billbook-body");
+    billbookBody.innerHTML = ""; // Clear existing rows
 
-    // Update total
+    for (let i = 0; i < 40; i++) {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td><input type="number" class="input-box" oninput="updateTotal(this)" /></td>
+            <td><input type="text" class="input-box" /></td>
+            <td><input type="number" class="input-box" oninput="updateTotal(this)" /></td>
+            <td><span class="value">0.00</span></td>
+        `;
+
+        billbookBody.appendChild(row);
+    }
+}
+
+// Update the total value
+function updateTotal(input) {
+    const row = input.closest("tr");
+    const quantity = row.querySelector("td:nth-child(1) input").value || 0;
+    const rate = row.querySelector("td:nth-child(3) input").value || 0;
+    const valueCell = row.querySelector("td:nth-child(4) span");
+
+    const value = parseFloat(quantity) * parseFloat(rate);
+    valueCell.textContent = value.toFixed(2);
+
+    calculateTotal();
+}
+
+// Calculate the total of all rows
+function calculateTotal() {
+    const valueCells = document.querySelectorAll("td:nth-child(4) span");
     let total = 0;
-    document.querySelectorAll('.value').forEach(cell => {
+
+    valueCells.forEach((cell) => {
         total += parseFloat(cell.textContent) || 0;
     });
-    document.getElementById('totalValue').textContent = total.toFixed(2);
+
+    document.getElementById("totalValue").textContent = total.toFixed(2);
 }
 
-// Calculator Logic
-let displayValue = '';
+// Calculator functionality
+let displayValue = "";
 
 function appendNumber(number) {
     displayValue += number;
-    updateCalculatorDisplay();
+    document.getElementById("display").value = displayValue;
 }
 
 function appendOperator(operator) {
-    displayValue += ` ${operator} `;
-    updateCalculatorDisplay();
+    displayValue += operator;
+    document.getElementById("display").value = displayValue;
 }
 
 function calculate() {
     try {
         displayValue = eval(displayValue).toString();
+        document.getElementById("display").value = displayValue;
     } catch {
-        displayValue = 'Error';
+        document.getElementById("display").value = "Error";
     }
-    updateCalculatorDisplay();
 }
 
 function clearDisplay() {
-    displayValue = '';
-    updateCalculatorDisplay();
+    displayValue = "";
+    document.getElementById("display").value = displayValue;
 }
-
-function updateCalculatorDisplay() {
-    document.getElementById('display').value = displayValue;
-}
-
-// Keyboard Input for Calculator
-document.addEventListener('keydown', (event) => {
-    const allowedKeys = '0123456789+-*/.()';
-    if (allowedKeys.includes(event.key)) {
-        appendNumber(event.key);
-    } else if (event.key === 'Enter') {
-        calculate();
-    } else if (event.key === 'Backspace') {
-        displayValue = displayValue.slice(0, -1);
-        updateCalculatorDisplay();
-    }
-});
