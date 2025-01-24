@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instagram Reels on Your Website</title>
+  <title>Display Instagram Reel on Your Website</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,62 +14,81 @@
       margin-top: 20px;
       color: #333;
     }
-    .reels-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
+    .input-section {
       margin-top: 30px;
-      width: 80%;
-      max-width: 1200px;
-      margin: 0 auto;
     }
-    .reel-card {
-      text-align: center;
+    .input-section input {
+      padding: 10px;
+      width: 60%;
+      font-size: 16px;
+    }
+    .input-section button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #25d366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .reel-container {
+      margin-top: 30px;
     }
     .reel-video {
       width: 100%;
-      height: 250px;
-      object-fit: cover;
+      max-width: 640px;
+      height: auto;
       border-radius: 8px;
-      cursor: pointer;
+      display: block;
+      margin: 0 auto;
     }
   </style>
 </head>
 <body>
 
-  <h1>Instagram Reels Showcase (Hosted Locally)</h1>
+  <h1>Instagram Reel Display</h1>
 
-  <div class="reels-container" id="reels-container">
-    <!-- Reels will be displayed here -->
+  <div class="input-section">
+    <input type="text" id="reel-link" placeholder="Enter Instagram Reel URL">
+    <button onclick="displayReel()">Display Reel</button>
+    <p id="error-message" style="color: red; display: none;">Please enter a valid Instagram Reel URL.</p>
+  </div>
+
+  <div class="reel-container" id="reel-container">
+    <!-- The Reel video will be shown here -->
   </div>
 
   <script>
-    // List of URLs for locally hosted Instagram Reels videos
-    const reelLinks = [
-      'path/to/your/first/reel.mp4', // Replace with actual paths to downloaded Reels
-      'path/to/your/second/reel.mp4',
-      'path/to/your/third/reel.mp4',
-      // Add more Reels here
-    ];
-
-    const container = document.getElementById('reels-container');
-
-    // Loop through each Reel and create a video element to display it
-    reelLinks.forEach(reelLink => {
-      const reelCard = document.createElement('div');
-      reelCard.classList.add('reel-card');
+    function displayReel() {
+      const reelLink = document.getElementById('reel-link').value.trim();
+      const errorMessage = document.getElementById('error-message');
+      const container = document.getElementById('reel-container');
       
-      const reelVideo = document.createElement('video');
-      reelVideo.classList.add('reel-video');
-      reelVideo.src = reelLink;
-      reelVideo.controls = true; // Adds controls (play/pause) to the video
-      reelVideo.onclick = function() {
-        reelVideo.play(); // Plays the video when clicked
-      };
+      // Validate URL
+      const regex = /https:\/\/www\.instagram\.com\/reel\/[A-Za-z0-9_-]+\/?/;
+      if (!reelLink.match(regex)) {
+        errorMessage.style.display = 'block';
+        return;
+      }
+      
+      // Hide error message if URL is valid
+      errorMessage.style.display = 'none';
+      
+      // Fetch video URL (this requires third-party API or scraping to get the real video URL)
+      // For now, we just simulate the video URL.
+      const videoUrl = `https://path-to-your-api-that-fetches-reel-video?url=${encodeURIComponent(reelLink)}`;
 
-      reelCard.appendChild(reelVideo);
-      container.appendChild(reelCard);
-    });
+      // Display the video (this should be the URL from the Instagram API or scraper)
+      const videoElement = document.createElement('video');
+      videoElement.classList.add('reel-video');
+      videoElement.controls = true;
+      videoElement.src = videoUrl;
+      container.innerHTML = '';  // Clear previous video
+      container.appendChild(videoElement);
+
+      // Reset the input field
+      document.getElementById('reel-link').value = '';
+    }
   </script>
 
 </body>
