@@ -8,7 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 50px;
+            margin-top: 20px;
         }
         input[type="text"] {
             width: 80%;
@@ -21,51 +21,57 @@
             font-size: 18px;
             cursor: pointer;
         }
-        #view-counter {
-            font-size: 2rem;
-            color: #333;
+        #video-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
             margin-top: 20px;
+        }
+        iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
         }
     </style>
 </head>
 <body>
     <h1>YouTube Video Viewer</h1>
-    <p>Enter a YouTube video link below, then click the button to open it in 20 tabs:</p>
+    <p>Enter a YouTube video link below, then click the button to embed it 20 times on the page:</p>
     <input type="text" id="video-link" placeholder="Enter YouTube video link here">
     <br>
-    <button id="open-tabs">Open 20 Tabs</button>
-    <div id="view-counter">Real-Time Views: 0</div>
+    <button id="embed-videos">Embed 20 Videos</button>
+    <div id="video-container"></div>
 
     <script>
-        const numberOfTabs = 20; // Number of tabs to open
-        let viewCount = 0;
-
-        // Event listener for the button
-        document.getElementById('open-tabs').addEventListener('click', () => {
+        document.getElementById('embed-videos').addEventListener('click', () => {
             const videoLink = document.getElementById('video-link').value.trim();
+            const videoContainer = document.getElementById('video-container');
 
-            if (!videoLink || !isValidYouTubeLink(videoLink)) {
-                alert("Please enter a valid YouTube video link.");
+            // Clear any existing videos
+            videoContainer.innerHTML = '';
+
+            // Validate the YouTube link
+            const videoId = extractYouTubeVideoId(videoLink);
+            if (!videoId) {
+                alert('Please enter a valid YouTube video link.');
                 return;
             }
 
-            for (let i = 0; i < numberOfTabs; i++) {
-                window.open(videoLink, '_blank');
-                incrementView();
+            // Embed the video 20 times
+            for (let i = 0; i < 20; i++) {
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=0`;
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                iframe.allowFullscreen = true;
+                videoContainer.appendChild(iframe);
             }
         });
 
-        // Function to increment the view counter
-        function incrementView() {
-            viewCount++;
-            document.getElementById('view-counter').textContent = `Real-Time Views: ${viewCount}`;
-        }
-
-        // Function to validate the YouTube link
-        function isValidYouTubeLink(link) {
-            const regex = /^https:\/\/(www\.)?youtube\.com\/watch\?v=.+/;
-            const shortRegex = /^https:\/\/youtu\.be\/.+/;
-            return regex.test(link) || shortRegex.test(link);
+        // Function to extract the YouTube video ID from the link
+        function extractYouTubeVideoId(link) {
+            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/;
+            const match = link.match(regex);
+            return match ? match[1] : null;
         }
     </script>
 </body>
