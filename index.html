@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Embed 30 Instagram Reels</title>
+  <title>Display Instagram Reels</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -58,20 +58,20 @@
 </head>
 <body>
 
-  <h1>Embed 30 Instagram Reels</h1>
+  <h1>Display Instagram Reels</h1>
 
   <div class="input-section">
     <input type="text" id="reel-link" placeholder="Paste Instagram Reel URL here...">
-    <button onclick="embedReels()">Embed 30 Reels</button>
+    <button onclick="displayReels()">Display 30 Reels</button>
     <p id="error-message" style="color: red; display: none;">Please enter a valid Instagram Reel URL.</p>
   </div>
 
   <div class="reels-container" id="reels-container">
-    <!-- Instagram Reels will be embedded here -->
+    <!-- Instagram Reels will be displayed here -->
   </div>
 
   <script>
-    function embedReels() {
+    function displayReels() {
       const reelLink = document.getElementById('reel-link').value.trim();
       const errorMessage = document.getElementById('error-message');
       const container = document.getElementById('reels-container');
@@ -89,10 +89,12 @@
       // Clear the container
       container.innerHTML = '';
 
-      // Embed 30 Instagram Reels
+      // Display 30 Instagram Reels
       for (let i = 0; i < 30; i++) {
         const iframe = document.createElement('iframe');
-        iframe.src = `${reelLink}/embed`;
+        iframe.src = reelLink;  // Simply load the Instagram Reel URL in iframe
+        iframe.width = '400';
+        iframe.height = '500';
         container.appendChild(iframe);
       }
 
