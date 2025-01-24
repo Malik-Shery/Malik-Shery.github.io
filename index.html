@@ -33,22 +33,27 @@
             border: none;
         }
     </style>
+    <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body>
     <h1>YouTube Video Viewer</h1>
-    <p>Enter a YouTube video link below, then click the button to embed it 20 times on the page:</p>
+    <p>Enter a YouTube video link below, then click to embed and play all videos simultaneously:</p>
     <input type="text" id="video-link" placeholder="Enter YouTube video link here">
     <br>
-    <button id="embed-videos">Embed 20 Videos</button>
+    <button id="embed-videos">Embed Videos</button>
+    <button id="play-videos">Play All Videos</button>
     <div id="video-container"></div>
 
     <script>
+        let players = []; // Array to store all YouTube player instances
+
         document.getElementById('embed-videos').addEventListener('click', () => {
             const videoLink = document.getElementById('video-link').value.trim();
             const videoContainer = document.getElementById('video-container');
 
             // Clear any existing videos
             videoContainer.innerHTML = '';
+            players = [];
 
             // Validate the YouTube link
             const videoId = extractYouTubeVideoId(videoLink);
@@ -59,20 +64,42 @@
 
             // Embed the video 20 times
             for (let i = 0; i < 20; i++) {
-                const iframe = document.createElement('iframe');
-                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=0`;
-                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                iframe.allowFullscreen = true;
+                const iframe = document.createElement('div');
+                iframe.id = `player${i}`; // Unique ID for each player
                 videoContainer.appendChild(iframe);
+
+                // Initialize YouTube Player API for each iframe
+                const player = new YT.Player(`player${i}`, {
+                    height: '200',
+                    width: '100%',
+                    videoId: videoId,
+                    events: {
+                        onReady: onPlayerReady
+                    }
+                });
+
+                players.push(player);
             }
         });
 
-        // Function to extract the YouTube video ID from the link
+        // Extract YouTube video ID from the link
         function extractYouTubeVideoId(link) {
             const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/;
             const match = link.match(regex);
             return match ? match[1] : null;
         }
+
+        // Function called when a player is ready
+        function onPlayerReady(event) {
+            console.log('Player is ready:', event.target);
+        }
+
+        // Play all videos simultaneously
+        document.getElementById('play-videos').addEventListener('click', () => {
+            players.forEach(player => {
+                player.playVideo();
+            });
+        });
     </script>
 </body>
 </html>
