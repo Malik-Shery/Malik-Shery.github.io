@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video in 20 Tabs</title>
+    <title>YouTube Video Viewer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
         }
         button {
             padding: 10px 20px;
@@ -24,25 +30,42 @@
 </head>
 <body>
     <h1>YouTube Video Viewer</h1>
-    <p>Click the button below to open a YouTube video in 20 tabs and simulate real-time views.</p>
+    <p>Enter a YouTube video link below, then click the button to open it in 20 tabs:</p>
+    <input type="text" id="video-link" placeholder="Enter YouTube video link here">
+    <br>
     <button id="open-tabs">Open 20 Tabs</button>
     <div id="view-counter">Real-Time Views: 0</div>
 
     <script>
-        const youtubeURL = "https://www.youtube.com/watch?v=YOUR_VIDEO_ID"; // Replace with your video ID
-        const numberOfTabs = 20;
-        let viewCount = 20;
+        const numberOfTabs = 20; // Number of tabs to open
+        let viewCount = 0;
 
+        // Event listener for the button
         document.getElementById('open-tabs').addEventListener('click', () => {
+            const videoLink = document.getElementById('video-link').value.trim();
+
+            if (!videoLink || !isValidYouTubeLink(videoLink)) {
+                alert("Please enter a valid YouTube video link.");
+                return;
+            }
+
             for (let i = 0; i < numberOfTabs; i++) {
-                window.open(youtubeURL, '_blank');
+                window.open(videoLink, '_blank');
                 incrementView();
             }
         });
 
+        // Function to increment the view counter
         function incrementView() {
             viewCount++;
             document.getElementById('view-counter').textContent = `Real-Time Views: ${viewCount}`;
+        }
+
+        // Function to validate the YouTube link
+        function isValidYouTubeLink(link) {
+            const regex = /^https:\/\/(www\.)?youtube\.com\/watch\?v=.+/;
+            const shortRegex = /^https:\/\/youtu\.be\/.+/;
+            return regex.test(link) || shortRegex.test(link);
         }
     </script>
 </body>
