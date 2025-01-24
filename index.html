@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instagram Reels Links</title>
+  <title>Instagram Reels on Website</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -48,34 +48,34 @@
       max-width: 1200px;
       margin: 0 auto;
     }
-    .reel-button {
-      padding: 10px 20px;
-      background-color: #25d366;
-      color: white;
-      border: none;
-      border-radius: 5px;
+    .reel-thumbnail {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 8px;
       cursor: pointer;
+    }
+    .reel-container div {
       text-align: center;
-      font-size: 16px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Instagram Reels Links</h1>
+  <h1>Instagram Reels Thumbnails</h1>
 
   <div class="input-section">
     <input type="text" id="reel-link" placeholder="Paste Instagram Reel URL here...">
-    <button onclick="generateLinks()">Generate 30 Reels Links</button>
+    <button onclick="generateThumbnails()">Generate 30 Reels Thumbnails</button>
     <p id="error-message" style="color: red; display: none;">Please enter a valid Instagram Reel URL.</p>
   </div>
 
   <div class="reels-container" id="reels-container">
-    <!-- Instagram Reels links will be displayed here -->
+    <!-- Instagram Reels thumbnails will be displayed here -->
   </div>
 
   <script>
-    function generateLinks() {
+    function generateThumbnails() {
       const reelLink = document.getElementById('reel-link').value.trim();
       const errorMessage = document.getElementById('error-message');
       const container = document.getElementById('reels-container');
@@ -93,15 +93,22 @@
       // Clear the container
       container.innerHTML = '';
 
-      // Generate 30 clickable links for Instagram Reels
+      // Display 30 Instagram Reels thumbnails with links
       for (let i = 0; i < 30; i++) {
-        const reelButton = document.createElement('button');
-        reelButton.classList.add('reel-button');
-        reelButton.innerText = `Reel ${i + 1}`;
-        reelButton.onclick = function() {
-          window.open(reelLink, '_blank');  // Open the Reel in a new tab
+        const reelDiv = document.createElement('div');
+        
+        // Create a thumbnail image (static placeholder or dynamic fetch)
+        const reelThumbnail = document.createElement('img');
+        reelThumbnail.classList.add('reel-thumbnail');
+        reelThumbnail.src = 'https://via.placeholder.com/400x250?text=Reel+Thumbnail';  // Placeholder image
+        
+        // Add a click event that opens the Reel in a new tab
+        reelThumbnail.onclick = function() {
+          window.open(reelLink, '_blank');  // Open the Instagram Reel in a new tab
         };
-        container.appendChild(reelButton);
+        
+        reelDiv.appendChild(reelThumbnail);
+        container.appendChild(reelDiv);
       }
 
       // Clear the input field
