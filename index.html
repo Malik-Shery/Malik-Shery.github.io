@@ -3,36 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instagram Reels Viewer</title>
+  <title>Open 30 Instagram Reels</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      text-align: center;
       background-color: #f4f4f4;
     }
-
-    h1 {
-      color: #333;
-      margin-top: 20px;
-    }
-
     .input-section {
       margin: 20px;
       text-align: center;
     }
-
     .input-section input {
       padding: 10px;
       width: 60%;
       font-size: 16px;
       margin-right: 10px;
     }
-
     .input-section button {
       padding: 10px 20px;
       font-size: 16px;
@@ -42,48 +31,42 @@
       border: none;
       border-radius: 5px;
     }
-
-    .reels-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-      margin-top: 30px;
-      width: 80%;
-      max-width: 1200px;
-    }
-
-    iframe {
-      width: 100%;
-      height: 500px;
-      border: none;
-      border-radius: 8px;
+    .input-section p {
+      font-size: 16px;
+      color: #333;
     }
   </style>
 </head>
 <body>
 
-  <h1>Instagram Reels Viewer</h1>
+  <h1>Open 30 Instagram Reels</h1>
 
   <div class="input-section">
     <input type="text" id="reel-link" placeholder="Paste Instagram Reel URL here...">
-    <button onclick="addReel()">Add Reel</button>
-  </div>
-
-  <div class="reels-container" id="reels-container">
-    <!-- Instagram Reels will appear here -->
+    <button onclick="openTabs()">Open 30 Tabs</button>
+    <p id="error-message" style="color: red; display: none;">Please enter a valid Instagram Reel URL.</p>
   </div>
 
   <script>
-    function addReel() {
+    function openTabs() {
       const reelLink = document.getElementById('reel-link').value.trim();
-      if (reelLink === "") return;
+      const errorMessage = document.getElementById('error-message');
 
-      const reelEmbed = `<iframe src="${reelLink}/embed" frameborder="0" allowfullscreen></iframe>`;
-      const container = document.getElementById('reels-container');
-      container.innerHTML += reelEmbed;
+      // Validate the URL
+      const regex = /https:\/\/www\.instagram\.com\/reel\/[A-Za-z0-9_-]+\/?/;
+      if (!reelLink.match(regex)) {
+        errorMessage.style.display = 'block';
+        return;
+      }
 
-      // Clear input field after adding the link
-      document.getElementById('reel-link').value = "";
+      // Open 30 tabs with the provided Instagram Reel URL
+      for (let i = 0; i < 30; i++) {
+        window.open(reelLink, `_blank`);
+      }
+
+      // Hide error message and clear input
+      errorMessage.style.display = 'none';
+      document.getElementById('reel-link').value = '';
     }
   </script>
 
