@@ -1,37 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Snapchat-Like App</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video in 20 Tabs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        #view-counter {
+            font-size: 2rem;
+            color: #333;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-  <div class="app">
-    <!-- Header -->
-    <div class="header">
-      <h1>SnapClone</h1>
-    </div>
+    <h1>YouTube Video Viewer</h1>
+    <p>Click the button below to open a YouTube video in 20 tabs and simulate real-time views.</p>
+    <button id="open-tabs">Open 20 Tabs</button>
+    <div id="view-counter">Real-Time Views: 0</div>
 
-    <!-- Camera View -->
-    <div class="camera-view">
-      <video id="video" autoplay playsinline></video>
-      <button id="capture-btn">📸</button>
-    </div>
+    <script>
+        const youtubeURL = "https://www.youtube.com/watch?v=YOUR_VIDEO_ID"; // Replace with your video ID
+        const numberOfTabs = 20;
+        let viewCount = 20;
 
-    <!-- Stories Section -->
-    <div class="stories">
-      <h2>Stories</h2>
-      <div id="stories-container"></div>
-    </div>
+        document.getElementById('open-tabs').addEventListener('click', () => {
+            for (let i = 0; i < numberOfTabs; i++) {
+                window.open(youtubeURL, '_blank');
+                incrementView();
+            }
+        });
 
-    <!-- Footer -->
-    <div class="footer">
-      <button onclick="showCamera()">📷 Camera</button>
-      <button onclick="showStories()">📰 Stories</button>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+        function incrementView() {
+            viewCount++;
+            document.getElementById('view-counter').textContent = `Real-Time Views: ${viewCount}`;
+        }
+    </script>
 </body>
 </html>
