@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Display Instagram Reels</title>
+  <title>Instagram Reels Links</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -48,35 +48,39 @@
       max-width: 1200px;
       margin: 0 auto;
     }
-    iframe {
-      width: 100%;
-      height: 500px;
+    .reel-button {
+      padding: 10px 20px;
+      background-color: #25d366;
+      color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Display Instagram Reels</h1>
+  <h1>Instagram Reels Links</h1>
 
   <div class="input-section">
     <input type="text" id="reel-link" placeholder="Paste Instagram Reel URL here...">
-    <button onclick="displayReels()">Display 30 Reels</button>
+    <button onclick="generateLinks()">Generate 30 Reels Links</button>
     <p id="error-message" style="color: red; display: none;">Please enter a valid Instagram Reel URL.</p>
   </div>
 
   <div class="reels-container" id="reels-container">
-    <!-- Instagram Reels will be displayed here -->
+    <!-- Instagram Reels links will be displayed here -->
   </div>
 
   <script>
-    function displayReels() {
+    function generateLinks() {
       const reelLink = document.getElementById('reel-link').value.trim();
       const errorMessage = document.getElementById('error-message');
       const container = document.getElementById('reels-container');
       
-      // Validate the URL
+      // Validate the URL format
       const regex = /https:\/\/www\.instagram\.com\/reel\/[A-Za-z0-9_-]+\/?/;
       if (!reelLink.match(regex)) {
         errorMessage.style.display = 'block';
@@ -89,13 +93,15 @@
       // Clear the container
       container.innerHTML = '';
 
-      // Display 30 Instagram Reels
+      // Generate 30 clickable links for Instagram Reels
       for (let i = 0; i < 30; i++) {
-        const iframe = document.createElement('iframe');
-        iframe.src = reelLink;  // Simply load the Instagram Reel URL in iframe
-        iframe.width = '400';
-        iframe.height = '500';
-        container.appendChild(iframe);
+        const reelButton = document.createElement('button');
+        reelButton.classList.add('reel-button');
+        reelButton.innerText = `Reel ${i + 1}`;
+        reelButton.onclick = function() {
+          window.open(reelLink, '_blank');  // Open the Reel in a new tab
+        };
+        container.appendChild(reelButton);
       }
 
       // Clear the input field
