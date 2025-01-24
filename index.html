@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Display Instagram Reels</title>
+  <title>Instagram Reels on Your Website</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -26,78 +26,50 @@
     .reel-card {
       text-align: center;
     }
-    .reel-thumbnail {
+    .reel-video {
       width: 100%;
       height: 250px;
       object-fit: cover;
       border-radius: 8px;
       cursor: pointer;
     }
-    .input-section {
-      margin-top: 30px;
-    }
-    .input-section input {
-      padding: 10px;
-      width: 60%;
-      font-size: 16px;
-    }
-    .input-section button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #25d366;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
   </style>
 </head>
 <body>
 
-  <h1>Instagram Reels Showcase</h1>
-
-  <div class="input-section">
-    <input type="text" id="reel-link" placeholder="Enter Instagram Reel URL">
-    <button onclick="showReels()">Show Reels</button>
-  </div>
+  <h1>Instagram Reels Showcase (Hosted Locally)</h1>
 
   <div class="reels-container" id="reels-container">
     <!-- Reels will be displayed here -->
   </div>
 
   <script>
-    function showReels() {
-      const reelLink = document.getElementById('reel-link').value.trim();
-      const container = document.getElementById('reels-container');
+    // List of URLs for locally hosted Instagram Reels videos
+    const reelLinks = [
+      'path/to/your/first/reel.mp4', // Replace with actual paths to downloaded Reels
+      'path/to/your/second/reel.mp4',
+      'path/to/your/third/reel.mp4',
+      // Add more Reels here
+    ];
+
+    const container = document.getElementById('reels-container');
+
+    // Loop through each Reel and create a video element to display it
+    reelLinks.forEach(reelLink => {
+      const reelCard = document.createElement('div');
+      reelCard.classList.add('reel-card');
       
-      if (!reelLink) {
-        alert("Please enter a valid Instagram Reel URL.");
-        return;
-      }
-      
-      // Generate 30 clickable Reel thumbnails (placeholder for now)
-      container.innerHTML = '';  // Clear container first
-      
-      for (let i = 0; i < 30; i++) {
-        const reelCard = document.createElement('div');
-        reelCard.classList.add('reel-card');
-        
-        // You would dynamically load the thumbnail if possible, or use placeholders.
-        const reelThumbnail = document.createElement('img');
-        reelThumbnail.classList.add('reel-thumbnail');
-        reelThumbnail.src = 'https://via.placeholder.com/400x250?text=Reel+Thumbnail';  // Placeholder
-        
-        reelThumbnail.onclick = function() {
-          window.open(reelLink, '_blank');  // Open the actual Instagram Reel in a new tab
-        };
-        
-        reelCard.appendChild(reelThumbnail);
-        container.appendChild(reelCard);
-      }
-      
-      // Reset the input field
-      document.getElementById('reel-link').value = '';
-    }
+      const reelVideo = document.createElement('video');
+      reelVideo.classList.add('reel-video');
+      reelVideo.src = reelLink;
+      reelVideo.controls = true; // Adds controls (play/pause) to the video
+      reelVideo.onclick = function() {
+        reelVideo.play(); // Plays the video when clicked
+      };
+
+      reelCard.appendChild(reelVideo);
+      container.appendChild(reelCard);
+    });
   </script>
 
 </body>
