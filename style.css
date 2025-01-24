@@ -1,104 +1,85 @@
-/* General Body Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: black;
-    color: white;
-    margin: 0;
-    padding: 0;
-    text-align: center;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
 }
 
-/* Container for the buttons */
-.container {
-    margin-top: 20px;
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
 
-/* Header styles */
-h1 {
-    font-size: 2em;
-    margin-bottom: 20px;
+.header {
+  background-color: #fffc00;
+  color: #000;
+  text-align: center;
+  padding: 15px 0;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-/* Button Styles */
-button {
-    padding: 10px 20px;
-    font-size: 1.2em;
-    margin: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    border: none;
-    background-color: gray;
-    color: white;
+.camera-view {
+  display: none;
+  flex: 1;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  background: black;
 }
 
-/* Billbook Table Styles */
-table {
-    width: 80%;
-    margin: 20px auto;
-    border-collapse: collapse;
+.camera-view video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-th, td {
-    padding: 10px;
-    border: 1px solid white;
+.camera-view button {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px;
+  border-radius: 50%;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
 }
 
-th {
-    text-align: left;
-    background-color: black;
-    color: white;
+.stories {
+  flex: 1;
+  padding: 20px;
+  display: none;
 }
 
-td {
-    background-color: black;
+#stories-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.input-box {
-    background-color: black;
-    color: white;
-    border: 1px solid white;
-    padding: 5px;
-    width: 100%;
+#stories-container img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
-/* Calculator Styles */
-.calculator {
-    margin: 20px auto;
-    background-color: white;
-    padding: 20px;
-    width: 300px;
-    border-radius: 10px;
-    border: 2px solid black;
+.footer {
+  display: flex;
+  justify-content: space-around;
+  background-color: #fffc00;
+  padding: 10px 0;
 }
 
-.calc-display {
-    width: 100%;
-    padding: 10px;
-    font-size: 1.5em;
-    margin-bottom: 20px;
-    text-align: right;
-    border-radius: 5px;
-    border: 1px solid black;
-    background-color: white;
-    color: black;
-}
-
-.keys button {
-    font-size: 1.5em;
-    width: 60px;
-    height: 60px;
-    margin: 5px;
-    border-radius: 5px;
-    background-color: white;
-    border: 1px solid black;
-    color: black;
-    cursor: pointer;
-}
-
-.keys button:hover {
-    background-color: lightgray;
-}
-
-.keys button:active {
-    background-color: gray;
+.footer button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
 }
