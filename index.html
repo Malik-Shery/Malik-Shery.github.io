@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Open 30 Instagram Reels</title>
+  <title>Embed 30 Instagram Reels</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,6 +11,10 @@
       padding: 0;
       text-align: center;
       background-color: #f4f4f4;
+    }
+    h1 {
+      color: #333;
+      margin-top: 20px;
     }
     .input-section {
       margin: 20px;
@@ -35,23 +39,43 @@
       font-size: 16px;
       color: #333;
     }
+    .reels-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+      width: 80%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Open 30 Instagram Reels</h1>
+  <h1>Embed 30 Instagram Reels</h1>
 
   <div class="input-section">
     <input type="text" id="reel-link" placeholder="Paste Instagram Reel URL here...">
-    <button onclick="openTabs()">Open 30 Tabs</button>
+    <button onclick="embedReels()">Embed 30 Reels</button>
     <p id="error-message" style="color: red; display: none;">Please enter a valid Instagram Reel URL.</p>
   </div>
 
+  <div class="reels-container" id="reels-container">
+    <!-- Instagram Reels will be embedded here -->
+  </div>
+
   <script>
-    function openTabs() {
+    function embedReels() {
       const reelLink = document.getElementById('reel-link').value.trim();
       const errorMessage = document.getElementById('error-message');
-
+      const container = document.getElementById('reels-container');
+      
       // Validate the URL
       const regex = /https:\/\/www\.instagram\.com\/reel\/[A-Za-z0-9_-]+\/?/;
       if (!reelLink.match(regex)) {
@@ -59,13 +83,20 @@
         return;
       }
 
-      // Open 30 tabs with the provided Instagram Reel URL
+      // Clear error message
+      errorMessage.style.display = 'none';
+
+      // Clear the container
+      container.innerHTML = '';
+
+      // Embed 30 Instagram Reels
       for (let i = 0; i < 30; i++) {
-        window.open(reelLink, `_blank`);
+        const iframe = document.createElement('iframe');
+        iframe.src = `${reelLink}/embed`;
+        container.appendChild(iframe);
       }
 
-      // Hide error message and clear input
-      errorMessage.style.display = 'none';
+      // Clear the input field
       document.getElementById('reel-link').value = '';
     }
   </script>
