@@ -3,40 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instagram Reels on Website</title>
+  <title>Display Instagram Reels</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
       text-align: center;
       background-color: #f4f4f4;
     }
     h1 {
-      color: #333;
       margin-top: 20px;
-    }
-    .input-section {
-      margin: 20px;
-      text-align: center;
-    }
-    .input-section input {
-      padding: 10px;
-      width: 60%;
-      font-size: 16px;
-      margin-right: 10px;
-    }
-    .input-section button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #25d366;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-    .input-section p {
-      font-size: 16px;
       color: #333;
     }
     .reels-container {
@@ -48,6 +23,9 @@
       max-width: 1200px;
       margin: 0 auto;
     }
+    .reel-card {
+      text-align: center;
+    }
     .reel-thumbnail {
       width: 100%;
       height: 250px;
@@ -55,63 +33,69 @@
       border-radius: 8px;
       cursor: pointer;
     }
-    .reel-container div {
-      text-align: center;
+    .input-section {
+      margin-top: 30px;
+    }
+    .input-section input {
+      padding: 10px;
+      width: 60%;
+      font-size: 16px;
+    }
+    .input-section button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #25d366;
+      color: white;
+      border: none;
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Instagram Reels Thumbnails</h1>
+  <h1>Instagram Reels Showcase</h1>
 
   <div class="input-section">
-    <input type="text" id="reel-link" placeholder="Paste Instagram Reel URL here...">
-    <button onclick="generateThumbnails()">Generate 30 Reels Thumbnails</button>
-    <p id="error-message" style="color: red; display: none;">Please enter a valid Instagram Reel URL.</p>
+    <input type="text" id="reel-link" placeholder="Enter Instagram Reel URL">
+    <button onclick="showReels()">Show Reels</button>
   </div>
 
   <div class="reels-container" id="reels-container">
-    <!-- Instagram Reels thumbnails will be displayed here -->
+    <!-- Reels will be displayed here -->
   </div>
 
   <script>
-    function generateThumbnails() {
+    function showReels() {
       const reelLink = document.getElementById('reel-link').value.trim();
-      const errorMessage = document.getElementById('error-message');
       const container = document.getElementById('reels-container');
       
-      // Validate the URL format
-      const regex = /https:\/\/www\.instagram\.com\/reel\/[A-Za-z0-9_-]+\/?/;
-      if (!reelLink.match(regex)) {
-        errorMessage.style.display = 'block';
+      if (!reelLink) {
+        alert("Please enter a valid Instagram Reel URL.");
         return;
       }
-
-      // Clear error message
-      errorMessage.style.display = 'none';
-
-      // Clear the container
-      container.innerHTML = '';
-
-      // Display 30 Instagram Reels thumbnails with links
+      
+      // Generate 30 clickable Reel thumbnails (placeholder for now)
+      container.innerHTML = '';  // Clear container first
+      
       for (let i = 0; i < 30; i++) {
-        const reelDiv = document.createElement('div');
+        const reelCard = document.createElement('div');
+        reelCard.classList.add('reel-card');
         
-        // Create a thumbnail image (static placeholder or dynamic fetch)
+        // You would dynamically load the thumbnail if possible, or use placeholders.
         const reelThumbnail = document.createElement('img');
         reelThumbnail.classList.add('reel-thumbnail');
-        reelThumbnail.src = 'https://via.placeholder.com/400x250?text=Reel+Thumbnail';  // Placeholder image
+        reelThumbnail.src = 'https://via.placeholder.com/400x250?text=Reel+Thumbnail';  // Placeholder
         
-        // Add a click event that opens the Reel in a new tab
         reelThumbnail.onclick = function() {
-          window.open(reelLink, '_blank');  // Open the Instagram Reel in a new tab
+          window.open(reelLink, '_blank');  // Open the actual Instagram Reel in a new tab
         };
         
-        reelDiv.appendChild(reelThumbnail);
-        container.appendChild(reelDiv);
+        reelCard.appendChild(reelThumbnail);
+        container.appendChild(reelCard);
       }
-
-      // Clear the input field
+      
+      // Reset the input field
       document.getElementById('reel-link').value = '';
     }
   </script>
