@@ -3,93 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Display Instagram Reel on Your Website</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #f4f4f4;
-    }
-    h1 {
-      margin-top: 20px;
-      color: #333;
-    }
-    .input-section {
-      margin-top: 30px;
-    }
-    .input-section input {
-      padding: 10px;
-      width: 60%;
-      font-size: 16px;
-    }
-    .input-section button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #25d366;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-    .reel-container {
-      margin-top: 30px;
-    }
-    .reel-video {
-      width: 100%;
-      max-width: 640px;
-      height: auto;
-      border-radius: 8px;
-      display: block;
-      margin: 0 auto;
-    }
-  </style>
+  <title>iPhone Calculator</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-  <h1>Instagram Reel Display</h1>
-
-  <div class="input-section">
-    <input type="text" id="reel-link" placeholder="Enter Instagram Reel URL">
-    <button onclick="displayReel()">Display Reel</button>
-    <p id="error-message" style="color: red; display: none;">Please enter a valid Instagram Reel URL.</p>
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button class="btn gray" onclick="clearDisplay()">C</button>
+      <button class="btn gray" onclick="toggleSign()">±</button>
+      <button class="btn gray" onclick="percent()">%</button>
+      <button class="btn orange" onclick="operator('/')">÷</button>
+      <button class="btn" onclick="appendNumber(7)">7</button>
+      <button class="btn" onclick="appendNumber(8)">8</button>
+      <button class="btn" onclick="appendNumber(9)">9</button>
+      <button class="btn orange" onclick="operator('*')">×</button>
+      <button class="btn" onclick="appendNumber(4)">4</button>
+      <button class="btn" onclick="appendNumber(5)">5</button>
+      <button class="btn" onclick="appendNumber(6)">6</button>
+      <button class="btn orange" onclick="operator('-')">−</button>
+      <button class="btn" onclick="appendNumber(1)">1</button>
+      <button class="btn" onclick="appendNumber(2)">2</button>
+      <button class="btn" onclick="appendNumber(3)">3</button>
+      <button class="btn orange" onclick="operator('+')">+</button>
+      <button class="btn zero" onclick="appendNumber(0)">0</button>
+      <button class="btn" onclick="appendNumber('.')">.</button>
+      <button class="btn orange" onclick="calculate()">=</button>
+    </div>
   </div>
-
-  <div class="reel-container" id="reel-container">
-    <!-- The Reel video will be shown here -->
-  </div>
-
-  <script>
-    function displayReel() {
-      const reelLink = document.getElementById('reel-link').value.trim();
-      const errorMessage = document.getElementById('error-message');
-      const container = document.getElementById('reel-container');
-      
-      // Validate URL
-      const regex = /https:\/\/www\.instagram\.com\/reel\/[A-Za-z0-9_-]+\/?/;
-      if (!reelLink.match(regex)) {
-        errorMessage.style.display = 'block';
-        return;
-      }
-      
-      // Hide error message if URL is valid
-      errorMessage.style.display = 'none';
-      
-      // Fetch video URL (this requires third-party API or scraping to get the real video URL)
-      // For now, we just simulate the video URL.
-      const videoUrl = `https://path-to-your-api-that-fetches-reel-video?url=${encodeURIComponent(reelLink)}`;
-
-      // Display the video (this should be the URL from the Instagram API or scraper)
-      const videoElement = document.createElement('video');
-      videoElement.classList.add('reel-video');
-      videoElement.controls = true;
-      videoElement.src = videoUrl;
-      container.innerHTML = '';  // Clear previous video
-      container.appendChild(videoElement);
-
-      // Reset the input field
-      document.getElementById('reel-link').value = '';
-    }
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
