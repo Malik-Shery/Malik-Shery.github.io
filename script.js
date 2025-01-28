@@ -68,5 +68,4 @@ function percent() {
 }
 
 function updateDisplay() {
-  display.textContent = currentInput || '0';
-}
+  display.textContent = currentInput || '0'; }
